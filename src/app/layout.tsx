@@ -29,7 +29,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SignIn className="absolute top-0 right-0" />
+        <div className="absolute top-0 left-0">
+          <SignIn />
+        </div>
         {children}
       </body>
     </html>

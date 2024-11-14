@@ -1,7 +1,7 @@
 "use client";
 
 import useTimeCountdown from "@/hooks/useTimeCountdown";
-import { FormEvent, SyntheticEvent, useCallback } from "react";
+import { FormEvent, useCallback } from "react";
 
 export default function Home() {
   const {
