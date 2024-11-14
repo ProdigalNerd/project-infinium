@@ -12,3 +12,26 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        Int         @id @default(autoincrement())
+  email     String      @db.VarChar(255)
+  createdAt DateTime    @default(now())
+  isOnline  Boolean     @default(false)
+  isDeleted Boolean     @default(false)
+  Character Character[]
+  Role      Role        @default(USER)
+}
+
+model Character {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(255)
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
+}
+
+enum Role {
+  USER
+  ADMIN
+}
