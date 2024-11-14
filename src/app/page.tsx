@@ -1,36 +1,33 @@
-import SignIn from "@/components/signin";
-// import useTimeCountdown from "@/hooks/useTimeCountdown";
-import { SyntheticEvent, useCallback } from "react";
+"use client";
+
+import useTimeCountdown from "@/hooks/useTimeCountdown";
+import { FormEvent, SyntheticEvent, useCallback } from "react";
 
 export default function Home() {
-  /* const {
+  const {
     currentCountdown,
     startCountdown,
-  } = useTimeCountdown(); */
+  } = useTimeCountdown();
 
   const handleCountdownComplete = useCallback(() => {
     alert('The fight has ended!');
   }, []);
 
-  const onSubmit = useCallback((event: SyntheticEvent) => {
+  const onSubmit = useCallback((event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
-    /* const target = event.target as typeof event.target & {
-      characterName: { value: string };
-      goblins: { value: number };
-    };
 
-    const goblins = target.goblins.value;
+    const formData = new FormData(event.currentTarget);
+    const goblins = formData.get('goblins')?.toString();
 
-    startCountdown(5, goblins, handleCountdownComplete); */
-  }, []);
-
+    startCountdown(5, parseInt(goblins as string), handleCountdownComplete); 
+  }, [startCountdown, handleCountdownComplete]);
+ 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <SignIn className="mb-3" />
         <form
           className="flex flex-col items-center gap-4"
+          onSubmit={onSubmit}
         >
             <label htmlFor="characterName" className="text-lg font-medium">
               Character Name:
@@ -65,7 +62,7 @@ export default function Home() {
         </form>
         <div className="flex flex-col items-center gap-4">
           <h2 className="text-2xl font-bold">Time Remaining:</h2>
-          <p className="text-4xl font-semibold">{/* currentCountdown */}</p>
+          <p className="text-4xl font-semibold">{currentCountdown}</p>
         </div>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
