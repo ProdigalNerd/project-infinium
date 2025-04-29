@@ -1,0 +1,54 @@
+- id: 1
+  name: Hometown
+  description: A small, quiet town where you grew up. The streets are lined with familiar houses and shops, and the air is filled with the scent of home-cooked meals.
+  type: village
+  coordinates:
+    x: 0
+    y: 0
+- id: 2
+  name: Nancy Barrera Plains
+  description: Security cell represent create because window certainly research. Situation
+    surface even dream action glass. Real whose reason affect.
+  type: plains
+  coordinates:
+    x: 0
+    y: 1
+- id: 3
+  name: Leslie Stanley Plains
+  description: Travel skill always positive. Town wrong organization western yard.
+  type: plains
+  coordinates:
+    x: -1
+    y: 1
+- id: 4
+  name: Tiffanyfurt
+  description: Late notice detail reach seek summer give bag. Catch case themselves
+    interview finally. Between trouble writer read.
+  type: village
+  coordinates:
+    x: -1
+    y: 2
+- id: 5
+  name: Dr. Julia Stewart Forest
+  description: Large start thing product hit teach great scene. Travel city couple
+    country. Statement opportunity article seat save specific none.
+  type: forest
+  coordinates:
+    x: 0
+    y: 2
+- id: 6
+  name: Daniel Martinez Forest
+  description: Military dinner professional hospital impact. Quickly together one
+    letter difficult.
+  type: forest
+  coordinates:
+    x: 1
+    y: 1
+- id: 7
+  name: Amber Perry Plains
+  description: Itself crime benefit tend race loss. Growth box despite ago make garden
+    case.
+  type: plains
+  coordinates:
+    x: 2
+    y: 1

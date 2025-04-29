@@ -1,0 +1,26 @@
+- name: General Store
+  id: 1
+  location_id: 1
+  description: A small store that sells everyday items, groceries, and local produce. The owner is friendly and always ready to chat.
+  items:
+    - name: Healing Potion
+      type: consumable
+      effect: Restores 50 HP
+      price: 10
+    - name: Bread
+      type: food
+      effect: Restores 20 HP
+      price: 5
+- name: Blacksmith
+  id: 2
+  location_id: 1
+  description: Owned by a burly man, the blacksmith is known for his exceptional craftsmanship. He can forge weapons and armor from the finest materials.
+  items:
+    - name: Iron Sword
+      type: weapon
+      damage: 10
+      price: 100
+    - name: Leather Armor
+      type: armor
+      defense: 5
+      price: 50
