@@ -5,10 +5,10 @@ from game.enums.direction import Direction
 from game.managers.combat_manager import CombatManager
 from game.managers.location_manager import LocationManager
 
-class Player(Character):
+class Player(Character, HealthBar):
     def __init__(self, name: str):
+        HealthBar.__init__(self, 100)
         self.name = name
-        self.health = HealthBar(100)
         self.level = 1
         self.experience = 0
         self.experience_to_next_level = 100
@@ -80,12 +80,6 @@ class Player(Character):
 
     def calculate_attack(self):
         return self.strength
-    
-    def take_damage(self, damage: int):
-        self.health.take_damage(damage)
-
-    def is_alive(self) -> bool:
-        return self.health.is_alive()
 
     def fight(self):
         if self.currentLocation and len(self.currentLocation.enemies) > 0:
