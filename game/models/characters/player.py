@@ -1,12 +1,9 @@
-import time
-from typing import Union
 from tabulate import tabulate
 from game.components.health import HealthBar
 from game.database.models.character import Character
 from game.enums.direction import Direction
+from game.managers.combat_manager import CombatManager
 from game.managers.location_manager import LocationManager
-from game.models.characters.base_enemy import BaseEnemy
-
 
 class Player(Character):
     def __init__(self, name: str):
@@ -18,7 +15,6 @@ class Player(Character):
         self.strength = 10
         self.intelligence = 10
         self.currentLocation = LocationManager().get_location_by_id(1)  # Assuming starting location is ID 1
-        self.combat_target: Union[BaseEnemy, None] = None
 
     def get_terminal_commands(self):
         commands = [
@@ -82,37 +78,23 @@ class Player(Character):
         if self.experience >= self.experience_to_next_level:
             print("You leveled up!")
 
-    def __calculate_attack__(self):
+    def calculate_attack(self):
         return self.strength
     
     def take_damage(self, damage: int):
         self.health.take_damage(damage)
 
+    def is_alive(self) -> bool:
+        return self.health.is_alive()
+
     def fight(self):
         if self.currentLocation and len(self.currentLocation.enemies) > 0:
-            self.combat_target = self.currentLocation.enemies.pop(0)
-            print(f"You are fighting a {type(self.combat_target).__name__}.")
-        
-        while self.combat_target and self.health.current > 0:
-            player_damage = self.__calculate_attack__()
-            self.combat_target.take_damage(player_damage)
-            print(f"You dealt {player_damage} damage to the {type(self.combat_target).__name__}.")
-            
-            if not self.combat_target.is_alive():
-                print(f"You defeated the {type(self.combat_target).__name__}!")
-                self.add_experience(self.combat_target.get_experience_reward())
-                self.combat_target = None
-                break
+            enemy = self.currentLocation.enemies.pop(0)
+            print(f"You are fighting a {type(enemy).__name__}.")
 
-            time.sleep(1)
-
-            self.combat_target.attack_player(self)
-            print(f"Current health: {self.health.current}/{self.health.max}")
-            
-            if self.health.current <= 0:
-                print("You have died.")
-                break
-
-            time.sleep(1)
+            combat_manager = CombatManager()
+            combat_manager.initialize_combat(self, enemy)
+        else:
+            print("No enemies to fight.")
 
 
