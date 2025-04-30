@@ -41,6 +41,13 @@ class LocationManager:
                 return location
         print(f"Location '{name}' not found.")
         return None
+    
+    def get_location_by_id(self, id):
+        for location in self.locations:
+            if location.id == id:
+                return location
+        print(f"Location with ID '{id}' not found.")
+        return None
 
     def add_location(self, location):
         self.locations[location.id] = location

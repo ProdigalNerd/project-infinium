@@ -11,3 +11,6 @@ class BaseEnemy:
 
     def attack_player(self, player):
         pass
+
+    def get_experience_reward(self) -> int:
+        return 5

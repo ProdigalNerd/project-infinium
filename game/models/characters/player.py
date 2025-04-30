@@ -16,7 +16,7 @@ class Player(Character):
         self.experience_to_next_level = 100
         self.strength = 10
         self.intelligence = 10
-        self.currentLocation = None
+        self.currentLocation = LocationManager().get_location_by_id(1)  # Assuming starting location is ID 1
         self.combat_target: Union[BaseEnemy, None] = None
 
     def get_terminal_commands(self):
@@ -81,6 +81,11 @@ class Player(Character):
         if self.current_health <= 0:
             print("You have died.")
 
+    def add_experience(self, amount):
+        self.experience += amount
+        if self.experience >= self.experience_to_next_level:
+            print("You leveled up!")
+
     def __calculate_attack__(self):
         return self.strength
 
@@ -96,6 +101,7 @@ class Player(Character):
             
             if self.combat_target.is_dead():
                 print(f"You defeated the {type(self.combat_target).__name__}!")
+                self.add_experience(self.combat_target.get_experience_reward())
                 self.combat_target = None
                 break
 
