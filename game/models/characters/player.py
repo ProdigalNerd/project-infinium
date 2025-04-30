@@ -1,3 +1,4 @@
+import time
 from typing import Union
 from tabulate import tabulate
 from game.components.health import HealthBar
@@ -103,11 +104,15 @@ class Player(Character):
                 self.combat_target = None
                 break
 
+            time.sleep(1)
+
             self.combat_target.attack_player(self)
             print(f"Current health: {self.health.current}/{self.health.max}")
             
             if self.health.current <= 0:
                 print("You have died.")
                 break
+
+            time.sleep(1)
 
 
