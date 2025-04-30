@@ -37,7 +37,7 @@ class Player(Character, HealthBar):
             ["Name", self.name],
             ["Location", self.currentLocation.name if self.currentLocation else "None"],
             ["Level", self.level],
-            ["Health", f"{self.health.current}/{self.max}"],
+            ["Health", f"{self.current_healtht}/{self.max_health}"],
             ["Experience", f"{self.experience}/{self.experience_to_next_level}"],
             ["Strength", self.strength],
             ["Intelligence", self.intelligence],
