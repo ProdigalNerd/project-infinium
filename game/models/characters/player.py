@@ -1,5 +1,6 @@
 from typing import Union
 from tabulate import tabulate
+from game.components.health import HealthBar
 from game.database.models.character import Character
 from game.enums.direction import Direction
 from game.managers.location_manager import LocationManager
@@ -9,8 +10,7 @@ from game.models.characters.base_enemy import BaseEnemy
 class Player(Character):
     def __init__(self, name: str):
         self.name = name
-        self.max_health = 100
-        self.current_health = 100
+        self.health = HealthBar(100)
         self.level = 1
         self.experience = 0
         self.experience_to_next_level = 100
@@ -40,7 +40,7 @@ class Player(Character):
             ["Name", self.name],
             ["Location", self.currentLocation.name if self.currentLocation else "None"],
             ["Level", self.level],
-            ["Health", f"{self.current_health}/{self.max_health}"],
+            ["Health", f"{self.health.current}/{self.max}"],
             ["Experience", f"{self.experience}/{self.experience_to_next_level}"],
             ["Strength", self.strength],
             ["Intelligence", self.intelligence],
@@ -76,11 +76,6 @@ class Player(Character):
         else:
             print("You are not in a location.")
 
-    def take_damage(self, damage):
-        self.current_health -= damage
-        if self.current_health <= 0:
-            print("You have died.")
-
     def add_experience(self, amount):
         self.experience += amount
         if self.experience >= self.experience_to_next_level:
@@ -88,27 +83,30 @@ class Player(Character):
 
     def __calculate_attack__(self):
         return self.strength
+    
+    def take_damage(self, damage: int):
+        self.health.take_damage(damage)
 
     def fight(self):
         if self.currentLocation and len(self.currentLocation.enemies) > 0:
             self.combat_target = self.currentLocation.enemies.pop(0)
             print(f"You are fighting a {type(self.combat_target).__name__}.")
         
-        while self.combat_target and self.current_health > 0:
+        while self.combat_target and self.health.current > 0:
             player_damage = self.__calculate_attack__()
             self.combat_target.take_damage(player_damage)
             print(f"You dealt {player_damage} damage to the {type(self.combat_target).__name__}.")
             
-            if self.combat_target.is_dead():
+            if not self.combat_target.is_alive():
                 print(f"You defeated the {type(self.combat_target).__name__}!")
                 self.add_experience(self.combat_target.get_experience_reward())
                 self.combat_target = None
                 break
 
             self.combat_target.attack_player(self)
-            print(f"Current health: {self.current_health}/{self.max_health}")
+            print(f"Current health: {self.health.current}/{self.health.max}")
             
-            if self.current_health <= 0:
+            if self.health.current <= 0:
                 print("You have died.")
                 break
 
