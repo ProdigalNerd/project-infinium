@@ -1,9 +1,18 @@
+from game.models.inventory.inventory_item import InventoryItem
+
+
 class Inventory:
     def __init__(self):
         self.items = []
 
     def add_item(self, item):
-        self.items.append(item)
+        for existing_item in self.items:
+            if existing_item.name == item and existing_item.stackable:
+                existing_item.quantity += 1
+                print(f"Added {item} to inventory.")
+                return
+        
+        self.items.append(InventoryItem(len(self.items) + 1, item, 1))
         print(f"Added {item} to inventory.")
 
     def remove_item(self, item):
