@@ -1,5 +1,5 @@
 from game.enums.location_type import LocationType
-from game.models.base_location import BaseLocation
+from game.models.locations.base_location import BaseLocation
 
 class Plains(BaseLocation):
     def __init__(self, location_data):

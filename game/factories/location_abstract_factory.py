@@ -23,13 +23,13 @@ class LocationAbstractFactory:
         return creator(*args, **kwargs)
     
     def __create_village__(self, *args, **kwargs):
-        from game.models.village import Village
+        from game.models.locations.village import Village
         return Village(kwargs)
     
     def __create_forest__(self, *args, **kwargs):
-        from game.models.forest import Forest
+        from game.models.locations.forest import Forest
         return Forest(kwargs)
 
     def __create_plains__(self, *args, **kwargs):
-        from game.models.plains import Plains
+        from game.models.locations.plains import Plains
         return Plains(kwargs)

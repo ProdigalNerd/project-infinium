@@ -4,6 +4,7 @@ from game.database.models.character import Character
 from game.enums.direction import Direction
 from game.managers.combat_manager import CombatManager
 from game.managers.location_manager import LocationManager
+from game.models.inventory.inventory import Inventory
 
 class Player(Character, HealthBar):
     def __init__(self, name: str):
@@ -14,7 +15,9 @@ class Player(Character, HealthBar):
         self.experience_to_next_level = 100
         self.strength = 10
         self.intelligence = 10
+        self.agility = 10
         self.currentLocation = LocationManager().get_location_by_id(1)  # Assuming starting location is ID 1
+        self.inventory = Inventory()
 
     def get_terminal_commands(self):
         commands = [
@@ -23,6 +26,7 @@ class Player(Character, HealthBar):
             ("travel", self.travel_to_location, False),
             ("explore", self.move_in_direction, False),
             ("search_location", self.search_current_location, False),
+            ("view_inventory", self.inventory.list_items, False),
         ]
         return commands
     
@@ -37,7 +41,7 @@ class Player(Character, HealthBar):
             ["Name", self.name],
             ["Location", self.currentLocation.name if self.currentLocation else "None"],
             ["Level", self.level],
-            ["Health", f"{self.current_healtht}/{self.max_health}"],
+            ["Health", f"{self.current_health}/{self.max_health}"],
             ["Experience", f"{self.experience}/{self.experience_to_next_level}"],
             ["Strength", self.strength],
             ["Intelligence", self.intelligence],
@@ -77,6 +81,13 @@ class Player(Character, HealthBar):
         self.experience += amount
         if self.experience >= self.experience_to_next_level:
             print("You leveled up!")
+
+    def add_loot(self, loot):
+        if isinstance(loot, list):
+            for item in loot:
+                self.inventory.add_item(item)
+        else:
+            self.inventory.add_item(loot)
 
     def calculate_attack(self):
         return self.strength

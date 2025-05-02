@@ -1,4 +1,4 @@
-from game.models.base_location import BaseLocation
+from game.models.locations.base_location import BaseLocation
 from game.models.characters.goblin import Goblin
 import random
 

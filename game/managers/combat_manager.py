@@ -14,6 +14,7 @@ class CombatManager:
             if not enemy.is_alive():
                 print(f"You defeated the {type(enemy).__name__}!")
                 player.add_experience(enemy.get_experience_reward())
+                player.add_loot(enemy.drop_loot())
                 self.combat_target = None
                 break
 
