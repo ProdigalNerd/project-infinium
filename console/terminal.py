@@ -34,7 +34,7 @@ class Terminal:
         self.command_registry.list_commands()
 
     def run(self):
-        self.clear_screen()
+        os.system('cls' if os.name == 'nt' else 'clear')
         print("Welcome to the terminal! Type 'help' for a list of commands.")
         while self.continue_running:
             command_input = input("> ").strip().lower()

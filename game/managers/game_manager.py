@@ -15,8 +15,11 @@ class GameManager:
             self.player = None
             self.location_manager = LocationManager()
 
-    @register_command("create_character", "Creates a new character.")
+    @register_command("create_character", "Creates a new character.", is_available_fn=lambda self: self.can_create_character())
     def create_character(self):
         name = input("Enter character name: ")
         self.player = Player(name)
         print(f"Character '{name}' created!")
+
+    def can_create_character(self):
+        return self.player is None
