@@ -1,4 +1,5 @@
 import yaml
+from console.decorators.register_command import register_command
 from console.helpers.pad_colored_text import pad_colored_text
 from game.factories.location_abstract_factory import LocationAbstractFactory
 from game.enums.location_type import LocationType
@@ -29,11 +30,6 @@ class LocationManager:
                 print(f"Error reading locations file: {e}")
 
             self.current_location = None
-
-    def get_terminal_commands(self):
-        return [
-            ("show_locations", self.show_locations, False),
-        ]
     
     def get_location_by_name(self, name):
         for location in self.locations:
@@ -52,6 +48,7 @@ class LocationManager:
     def add_location(self, location):
         self.locations[location.id] = location
     
+    @register_command("show_locations", "Displays all available locations.")
     def show_locations(self):
         if not self.locations:
             print("No locations available.")

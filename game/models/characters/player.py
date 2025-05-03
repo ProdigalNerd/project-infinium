@@ -1,4 +1,5 @@
 from tabulate import tabulate
+from console.decorators.register_command import register_command
 from game.components.health import HealthBar
 from game.database.models.character import Character
 from game.enums.direction import Direction
@@ -19,23 +20,7 @@ class Player(Character, HealthBar):
         self.currentLocation = LocationManager().get_location_by_id(1)  # Assuming starting location is ID 1
         self.inventory = Inventory()
 
-    def get_terminal_commands(self):
-        commands = [
-            ("show_stats", self.display_stats, False),
-            ("show_map", self.show_map, False),
-            ("travel", self.travel_to_location, False),
-            ("explore", self.move_in_direction, False),
-            ("search_location", self.search_current_location, False),
-            ("view_inventory", self.inventory.list_items, False),
-        ]
-        return commands
-    
-    def get_combat_terminal_commands(self):
-        commands = [
-            ("fight", self.fight, False),
-        ]
-        return commands
-
+    @register_command("show_stats", "Displays player stats.")
     def display_stats(self):
         stats = [
             ["Name", self.name],
@@ -49,17 +34,21 @@ class Player(Character, HealthBar):
         ]
         print(tabulate(stats, headers=["Attribute", "Value"], tablefmt="grid"))
 
+    @register_command("travel", "Travel to a specified location.")
     def travel_to_location(self, location_name):
         location_manager = LocationManager()
         self.currentLocation = location_manager.get_location_by_name(location_name)
 
+    @register_command("search", "Search the location to see what you find.")
     def search_current_location(self):
         self.currentLocation.search() # type: ignore
     
+    @register_command("show_map", "Show the map of the current location.")
     def show_map(self):
         location_manager = LocationManager()
         location_manager.generate_map(self.currentLocation)
     
+    @register_command("explore", "Travel in a specified direction.")
     def move_in_direction(self, direction):
         location_manager = LocationManager()
         if self.currentLocation:
@@ -92,6 +81,7 @@ class Player(Character, HealthBar):
     def calculate_attack(self):
         return self.strength
 
+    @register_command("fight", "Fight an enemy in the current location.")
     def fight(self):
         if self.currentLocation and len(self.currentLocation.enemies) > 0:
             enemy = self.currentLocation.enemies.pop(0)
