@@ -1,7 +1,6 @@
 import os
 
 from console.command_registry import CommandRegistry
-from console.decorators.register_command import register_command
 from game.managers.game_manager import GameManager
 
 class Terminal:
@@ -18,17 +17,32 @@ class Terminal:
             self.protected_commands = ["help", "exit", "clear"]
             self.command_registry = CommandRegistry()
             self.game_manager = GameManager()
+            self.initialize_commands()
 
-    @register_command("clear", "Clears the console screen")
+    def initialize_commands(self):
+        self.command_registry.register(
+            "exit",
+            "Exits the terminal.",
+            self.exit
+        )
+        self.command_registry.register(
+            "help",
+            "Displays available commands.",
+            self.help
+        )
+        self.command_registry.register(
+            "clear",
+            "Clears the terminal screen.",
+            self.clear_screen
+        )
+
     def clear_screen(self):
         os.system('cls' if os.name == 'nt' else 'clear')
 
-    @register_command("exit", "Exits the terminal")
     def exit(self):
         print("Exiting the terminal. Goodbye!")
         self.continue_running = False
 
-    @register_command("help", "Displays a list of available commands.")
     def help(self):
         print("Available commands:")
         self.command_registry.list_commands()

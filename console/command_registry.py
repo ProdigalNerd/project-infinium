@@ -14,8 +14,8 @@ class CommandRegistry:
             self.commands = {}
             self.initialized = True
 
-    def register(self, command: Command):
-        self.commands[command.name] = command
+    def register(self, name: str, description: str, execute_fn, is_available_fn=None):
+        self.commands[name] = Command(name, description, execute_fn, is_available_fn)
 
     def get_command(self, name: str):
         if name in self.commands:
@@ -30,4 +30,5 @@ class CommandRegistry:
 
     def list_commands(self):
         for command in sorted(self.commands.values(), key=lambda cmd: cmd.name):
-            print(f"{command.name}: {command.description}")
+            if command.is_available_fn is None or command.is_available_fn():
+                print(f"{command.name}: {command.description}")

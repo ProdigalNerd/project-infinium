@@ -1,4 +1,3 @@
-from console.decorators.register_command import register_command
 from game.models.inventory.inventory_item import InventoryItem
 
 
@@ -23,7 +22,6 @@ class Inventory:
         else:
             print(f"{item} not found in inventory.")
 
-    @register_command("view_inventory", "View all items in the inventory.")
     def list_items(self):
         if self.items:
             print("Inventory items:")

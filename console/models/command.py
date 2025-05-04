@@ -7,7 +7,7 @@ class Command:
 
     def execute(self, *args, **kwargs):
         if self.is_available():
-            self.execute_fn(*args, **kwargs)
+            self.execute_fn(**kwargs)
         else:
             print(f"Command '{self.name}' is not available.")
 

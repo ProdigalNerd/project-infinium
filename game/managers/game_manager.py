@@ -1,4 +1,4 @@
-from console.decorators.register_command import register_command
+from console.command_registry import CommandRegistry
 from game.managers.location_manager import LocationManager
 from game.models.characters.player import Player
 
@@ -14,8 +14,17 @@ class GameManager:
         if not hasattr(self, 'initialized'):
             self.player = None
             self.location_manager = LocationManager()
+            self.command_registry = CommandRegistry()
+            self.intiialize_commands()
 
-    @register_command("create_character", "Creates a new character.", is_available_fn=lambda self: self.can_create_character())
+    def intiialize_commands(self):
+        self.command_registry.register(
+            "create_character",
+            "Creates a new character.",
+            self.create_character,
+            self.can_create_character
+        )
+
     def create_character(self):
         name = input("Enter character name: ")
         self.player = Player(name)
