@@ -24,10 +24,10 @@ class Player(Character, HealthBar):
 
     def initialize_commands(self):
         self.command_registry.register("stats", "Display player stats", self.display_stats)
-        self.command_registry.register("travel", "Travel to a location", self.travel_to_location)
+        self.command_registry.register("travel", "Travel to a location", self.travel_to_location, has_extra_args=True)
         self.command_registry.register("search", "Search the current location", self.search_current_location)
         self.command_registry.register("map", "Show the map of the current location", self.show_map)
-        self.command_registry.register("move", "Move in a direction", self.move_in_direction)
+        self.command_registry.register("move", "Move in a direction", self.move_in_direction, has_extra_args=True)
         self.command_registry.register("fight", "Fight an enemy in the current location", self.fight)
 
     def display_stats(self):

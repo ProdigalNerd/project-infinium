@@ -1,0 +1,83 @@
+VILLAGE:
+  names:
+    - "{adjective} {noun}"
+    - "{noun} Village"
+    - "The {adjective} {noun}"
+  adjectives:
+    - Quiet
+    - Bustling
+    - Peaceful
+    - Rustic
+    - Charming
+  nouns:
+    - Willowbrook
+    - Rivermill
+    - Oakridge
+    - Ashford
+    - Greendale
+  descriptions:
+    - "A {adjective} village with {feature}."
+    - "A small settlement surrounded by {feature}."
+    - "A {adjective} hamlet known for {feature}."
+  features:
+    - cobblestone streets
+    - rolling hills
+    - a bustling marketplace
+    - a winding river
+    - friendly locals
+
+FOREST:
+  names:
+    - "{adjective} {noun} Forest"
+    - "{noun} Grove"
+    - "The {adjective} Woods"
+  adjectives:
+    - Whispering
+    - Shadowy
+    - Ancient
+    - Serene
+    - Lush
+  nouns:
+    - Emerald
+    - Shadowwood
+    - Silverleaf
+    - Dark Hollow
+    - Whispering Pines
+  descriptions:
+    - "A {adjective} forest filled with {feature}."
+    - "An ancient woodland where {feature}."
+    - "A serene forest with {feature}."
+  features:
+    - towering trees
+    - rustling leaves
+    - a babbling brook
+    - vibrant greenery
+    - magical creatures
+
+PLAINS:
+  names:
+    - "{adjective} {noun} Plains"
+    - "{noun} Fields"
+    - "The {adjective} {noun}"
+  adjectives:
+    - Vast
+    - Rolling
+    - Golden
+    - Windswept
+    - Endless
+  nouns:
+    - Sunridge
+    - Meadowvale
+    - Goldhaven
+    - Windmere
+    - Horizon
+  descriptions:
+    - "A {adjective} expanse of plains with {feature}."
+    - "Rolling fields where {feature}."
+    - "An open plain known for {feature}."
+  features:
+    - swaying grasses
+    - scattered wildflowers
+    - grazing herds
+    - gentle breezes
+    - distant horizons

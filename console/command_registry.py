@@ -14,8 +14,8 @@ class CommandRegistry:
             self.commands = {}
             self.initialized = True
 
-    def register(self, name: str, description: str, execute_fn, is_available_fn=None):
-        self.commands[name] = Command(name, description, execute_fn, is_available_fn)
+    def register(self, name: str, description: str, execute_fn, is_available_fn=None, has_extra_args=False):
+        self.commands[name] = Command(name, description, execute_fn, is_available_fn, has_extra_args)
 
     def get_command(self, name: str):
         if name in self.commands:
