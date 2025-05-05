@@ -5,6 +5,19 @@
   coordinates:
     x: 0
     y: 0
+  shops:
+    - name: General Store
+      items:
+        - name: Health Potion
+          price: 10
+        - name: Mana Potion
+          price: 15
+    - name: Blacksmith
+      items:
+        - name: Iron Sword
+          price: 50
+        - name: Wooden Shield
+          price: 30
 - id: 2
   name: Windswept Goldhaven Plains
   description: A Endless expanse of plains with swaying grasses.
