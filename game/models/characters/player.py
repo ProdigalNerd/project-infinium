@@ -26,6 +26,7 @@ class Player(Character, HealthBar):
         self.command_registry.register("stats", "Display player stats", self.display_stats)
         self.command_registry.register("travel", "Travel to a location", self.travel_to_location, has_extra_args=True)
         self.command_registry.register("search", "Search the current location", self.search_current_location)
+        self.command_registry.register("shop", "Visit a shop in the current location", self.visit_shop, self.can_visit_shops)
         self.command_registry.register("map", "Show the map of the current location", self.show_map)
         self.command_registry.register("move", "Move in a direction", self.move_in_direction, has_extra_args=True)
         self.command_registry.register("fight", "Fight an enemy in the current location", self.fight)
@@ -70,6 +71,14 @@ class Player(Character, HealthBar):
                 print("You can't go that way.")
         else:
             print("You are not in a location.")
+
+    def can_visit_shops(self):
+        if self.currentLocation and hasattr(self.currentLocation, 'shops'):
+            return len(self.currentLocation.shops) > 0
+        return False
+    
+    def visit_shop(self):
+        self.currentLocation.visit_shop()
 
     def add_experience(self, amount):
         self.experience += amount
