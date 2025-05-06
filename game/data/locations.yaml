@@ -9,15 +9,15 @@
     - name: General Store
       items:
         - name: Health Potion
-          price: 10
+          cost: 10
         - name: Mana Potion
-          price: 15
+          cost: 15
     - name: Blacksmith
       items:
         - name: Iron Sword
-          price: 50
+          cost: 50
         - name: Wooden Shield
-          price: 30
+          cost: 30
 - id: 2
   name: Windswept Goldhaven Plains
   description: A Endless expanse of plains with swaying grasses.
