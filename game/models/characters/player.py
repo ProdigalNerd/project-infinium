@@ -21,6 +21,7 @@ class Player(Character, HealthBar):
         self.current_location = LocationManager().get_location_by_id(1)  # Assuming starting location is ID 1
         self.inventory = Inventory()
         self.command_registry = CommandRegistry()
+        self.currency = 100
         self.initialize_commands()
 
     def initialize_commands(self):
@@ -30,6 +31,7 @@ class Player(Character, HealthBar):
         self.command_registry.register("visit_shop", "Visit a shop in the current location", self.visit_shop, self.can_visit_shops)
         self.command_registry.register("leave_shop", "Leave the shop you are currently visiting", self.leave_shop, self.is_visiting_shop)
         self.command_registry.register("browse_shop", "Browse the items in the shop", self.browse_shop, self.is_visiting_shop)
+        self.command_registry.register("purchase_item", "Purchase an item from the shop", self.purchase_item, self.is_visiting_shop)
         self.command_registry.register("map", "Show the map of the current location", self.show_map)
         self.command_registry.register("move", "Move in a direction", self.move_in_direction, has_extra_args=True)
         self.command_registry.register("fight", "Fight an enemy in the current location", self.fight)
@@ -43,7 +45,8 @@ class Player(Character, HealthBar):
             ["Experience", f"{self.experience}/{self.experience_to_next_level}"],
             ["Strength", self.strength],
             ["Intelligence", self.intelligence],
-            ["Agility", self.agility]
+            ["Agility", self.agility],
+            ["Currency", self.currency],
         ]
         print(tabulate(stats, headers=["Attribute", "Value"], tablefmt="grid"))
 
@@ -96,6 +99,10 @@ class Player(Character, HealthBar):
     def browse_shop(self):
         if isinstance(self.current_location, HasShops) and self.current_location.visiting_shop:
             self.current_location.visiting_shop.list_items()
+
+    def purchase_item(self):
+        if isinstance(self.current_location, HasShops) and self.current_location.visiting_shop:
+            self.current_location.visiting_shop.purchase_item(self)
 
     def add_experience(self, amount):
         self.experience += amount
