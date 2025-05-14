@@ -1,7 +1,7 @@
 import os
 
 from console.command_registry import CommandRegistry
-from game.managers.game_manager import GameManager
+from console.game_manager import GameManager
 
 class Terminal:
     _instance = None
@@ -17,6 +17,8 @@ class Terminal:
             self.protected_commands = ["help", "exit", "clear"]
             self.command_registry = CommandRegistry()
             self.game_manager = GameManager()
+            self.clear_screen()
+            self.game_manager.create_character()
             self.initialize_commands()
 
     def initialize_commands(self):

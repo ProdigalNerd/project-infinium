@@ -1,12 +1,11 @@
-import yaml
 from console.command_registry import CommandRegistry
-from console.helpers.pad_colored_text import pad_colored_text
+from game.components.has_persistence import HasPersistence
 from game.factories.location_abstract_factory import LocationAbstractFactory
 from game.enums.location_type import LocationType
 from game.generators.random_location import RandomLocation
-from colorama import Fore, Style
+from game.models.maps.map import Map
 
-class LocationManager:
+class LocationManager(HasPersistence):
     _instance = None
 
     def __new__(cls):
@@ -16,18 +15,13 @@ class LocationManager:
     
     def __init__(self):
         if not hasattr(self, 'initialized'):
+            HasPersistence.__init__(self, "./game/data/locations.yaml")
             self.locations = []
-            try:
-                with open("./game/data/locations.yaml", "r") as file:
-                    location_data = yaml.safe_load(file)
-
-                    location_af = LocationAbstractFactory()
-                    for location in location_data:
-                        self.locations.append(location_af.create_location(LocationType(location["type"]), **location))
-            except FileNotFoundError:
-                print("Locations file not found.")
-            except yaml.YAMLError as e:
-                print(f"Error reading locations file: {e}")
+            location_data = self.load_data()
+            location_af = LocationAbstractFactory()
+            if location_data is not None:
+                for location in location_data:
+                    self.locations.append(location_af.create_location(LocationType(location["type"]), **location))
 
             self.current_location = None
             self.command_registry = CommandRegistry()
@@ -64,36 +58,10 @@ class LocationManager:
         print("Available locations:")
         for location in self.locations:
             location.describe()
-    
-    def generate_map(self, current_location):
-        if not self.locations:
-            print("No locations available.")
-            return
 
-        # Determine the bounds of the grid
-        min_x = min(location.coordinates[0] for location in self.locations)
-        max_x = max(location.coordinates[0] for location in self.locations)
-        min_y = min(location.coordinates[1] for location in self.locations)
-        max_y = max(location.coordinates[1] for location in self.locations)
-
-        # Create a grid representation
-        grid = [[" " for _ in range(min_x, max_x + 1)] for _ in range(min_y, max_y + 1)]
-
-        # Populate the grid with location names or markers
-        for location in self.locations:
-            x, y = location.coordinates
-            if current_location and location.id == current_location.id:  # Highlight the current location
-                grid[y - min_y][x - min_x] = Fore.GREEN + location.name[0:5] + Style.RESET_ALL
-            else:
-                grid[y - min_y][x - min_x] = location.name[0:5]  # Use the first 5 characters of the location name
-
-        # Print the grid
-        print("Map of locations:")
-        row_separator = "-" * ((max_x - min_x + 1) * 12 - 3)  # Adjust length for cell width and separators
-        for i, row in enumerate(reversed(grid)):  # Reverse rows to display correctly in Cartesian coordinates
-            print(" | ".join(pad_colored_text(cell, 10) for cell in row))  # Print the row
-            if i < len(grid) - 1:  # Add a separator after each row except the last one
-                print(row_separator)
+    def generate_map(self):
+        map_generator = Map(self.locations)
+        map_generator.generate_map()
 
     def get_location_by_coordinates(self, coordinates):
         for location in self.locations:
@@ -119,10 +87,4 @@ class LocationManager:
         return neighbor_types
 
     def save_new_location(self, location):
-        try:
-            with open("./game/data/locations.yaml", "a") as file:
-                yaml.dump([location.toDict()], file, sort_keys=False)
-        except FileNotFoundError:
-            print("Locations file not found.")
-        except yaml.YAMLError as e:
-            print(f"Error writing to locations file: {e}")
+        self.save_data(location)

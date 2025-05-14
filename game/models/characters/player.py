@@ -59,7 +59,7 @@ class Player(Character, HealthBar):
     
     def show_map(self):
         location_manager = LocationManager()
-        location_manager.generate_map(self.current_location)
+        location_manager.generate_map()
     
     def move_in_direction(self, direction):
         location_manager = LocationManager()
@@ -102,7 +102,16 @@ class Player(Character, HealthBar):
 
     def purchase_item(self):
         if isinstance(self.current_location, HasShops) and self.current_location.visiting_shop:
-            self.current_location.visiting_shop.purchase_item(self)
+            item = self.current_location.visiting_shop.get_item_to_purchase()
+            if item:
+                if self.currency >= item.cost:
+                    self.currency -= item.cost
+                    self.inventory.add_item(item)
+                    print(f"Purchased {item.name} for {item.cost} gold.")
+                else:
+                    print("You don't have enough currency to purchase this item.")
+            else:
+                print("No item selected.")
 
     def add_experience(self, amount):
         self.experience += amount
