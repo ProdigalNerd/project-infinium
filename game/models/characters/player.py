@@ -35,6 +35,7 @@ class Player(Character, HealthBar):
         self.command_registry.register("map", "Show the map of the current location", self.show_map)
         self.command_registry.register("move", "Move in a direction", self.move_in_direction, has_extra_args=True)
         self.command_registry.register("fight", "Fight an enemy in the current location", self.fight)
+        self.command_registry.register("view_inventory", "View your inventory", self.inventory.list_items)
 
     def display_stats(self):
         stats = [

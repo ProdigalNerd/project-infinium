@@ -25,3 +25,24 @@
   coordinates:
     x: 0
     y: 1
+- id: 3
+  name: Horizon Fields
+  description: An open plain known for distant horizons.
+  type: plains
+  coordinates:
+    x: 0
+    y: 2
+- id: 4
+  name: Shadowwood Grove
+  description: A Shadowy forest filled with a babbling brook.
+  type: forest
+  coordinates:
+    x: 1
+    y: 2
+- id: 5
+  name: Silverleaf Grove
+  description: A Serene forest filled with towering trees.
+  type: forest
+  coordinates:
+    x: 1
+    y: 0
