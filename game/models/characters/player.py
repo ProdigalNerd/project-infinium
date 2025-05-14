@@ -32,6 +32,7 @@ class Player(Character, HealthBar):
         self.command_registry.register("leave_shop", "Leave the shop you are currently visiting", self.leave_shop, self.is_visiting_shop)
         self.command_registry.register("browse_shop", "Browse the items in the shop", self.browse_shop, self.is_visiting_shop)
         self.command_registry.register("purchase_item", "Purchase an item from the shop", self.purchase_item, self.is_visiting_shop)
+        self.command_registry.register("sell_item", "Sell an item to the shop", self.sell_item, self.is_visiting_shop)
         self.command_registry.register("map", "Show the map of the current location", self.show_map)
         self.command_registry.register("move", "Move in a direction", self.move_in_direction, has_extra_args=True)
         self.command_registry.register("fight", "Fight an enemy in the current location", self.fight)
@@ -113,6 +114,13 @@ class Player(Character, HealthBar):
                     print("You don't have enough currency to purchase this item.")
             else:
                 print("No item selected.")
+    
+    def sell_item(self):
+        if isinstance(self.current_location, HasShops) and self.current_location.visiting_shop:
+            item = self.inventory.select_item()
+            if item:
+                self.currency += item.cost // 2
+                self.inventory.remove_item(item)
 
     def add_experience(self, amount):
         self.experience += amount

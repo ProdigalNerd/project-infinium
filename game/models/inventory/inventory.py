@@ -33,3 +33,23 @@ class Inventory:
     def sort_items(self):
         self.items.sort()
         print("Inventory sorted.")
+
+    def select_item(self):
+        if not self.items:
+            print("There are no items in this shop.")
+            return
+
+        print("Available items:")
+        for index, item in enumerate(self.items, start=1):
+            print(f"{index}. {item.name}")
+
+        try:
+            choice = int(input("Enter the number of the item you want to sell: "))
+            if 1 <= choice <= len(self.items):
+                item = self.items[choice - 1]
+                return item
+            else:
+                print("Invalid choice. Please select a valid shop number.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+        return None
