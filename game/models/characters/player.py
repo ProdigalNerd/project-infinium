@@ -12,6 +12,7 @@ from game.models.skills.profession_registry import ProfessionRegistry
 class Player(Character, HealthBar, HasExperience):
     def __init__(self, name: str):
         HealthBar.__init__(self, 100)
+        HasExperience.__init__(self)
         self.name = name
         self.strength = 10
         self.intelligence = 10
