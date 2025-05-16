@@ -5,9 +5,9 @@ from game.components.has_shops import HasShops
 from game.components.health import HealthBar
 from game.database.models.character import Character
 from game.enums.direction import Direction
-from game.managers.combat_manager import CombatManager
 from game.managers.location_manager import LocationManager
 from game.models.inventory.inventory import Inventory
+from game.models.skills.profession_registry import ProfessionRegistry
 
 class Player(Character, HealthBar, HasExperience):
     def __init__(self, name: str):
@@ -19,6 +19,7 @@ class Player(Character, HealthBar, HasExperience):
         self.current_location = LocationManager().get_location_by_id(1)  # Assuming starting location is ID 1
         self.inventory = Inventory()
         self.command_registry = CommandRegistry()
+        self.profession_registry = ProfessionRegistry(self)
         self.currency = 100
         self.initialize_commands()
 
@@ -33,7 +34,6 @@ class Player(Character, HealthBar, HasExperience):
         self.command_registry.register("sell_item", "Sell an item to the shop", self.sell_item, self.is_visiting_shop)
         self.command_registry.register("map", "Show the map of the current location", self.show_map)
         self.command_registry.register("move", "Move in a direction", self.move_in_direction, has_extra_args=True)
-        self.command_registry.register("fight", "Fight an enemy in the current location", self.fight)
         self.command_registry.register("view_inventory", "View your inventory", self.inventory.list_items)
 
     def display_stats(self):
@@ -53,6 +53,9 @@ class Player(Character, HealthBar, HasExperience):
     def travel_to_location(self, location_name):
         location_manager = LocationManager()
         self.current_location = location_manager.get_location_by_name(location_name)
+
+    def get_current_location(self):
+        return self.current_location
 
     def search_current_location(self):
         self.current_location.search() # type: ignore
@@ -129,13 +132,3 @@ class Player(Character, HealthBar, HasExperience):
 
     def calculate_attack(self):
         return self.strength
-
-    def fight(self):
-        if self.current_location and len(self.current_location.enemies) > 0:
-            enemy = self.current_location.enemies.pop(0)
-            print(f"You are fighting a {type(enemy).__name__}.")
-
-            combat_manager = CombatManager()
-            combat_manager.initialize_combat(self, enemy)
-        else:
-            print("No enemies to fight.")

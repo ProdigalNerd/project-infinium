@@ -1,10 +1,11 @@
+from __future__ import annotations  # Required for forward references in type hints
 import time
 
 class CombatManager:
     def __init__(self):
         pass
 
-    def initialize_combat(self, player, enemy):
+    def initialize_combat(self, player: "Player", profession: "Profession", enemy: "BaseEnemy"):
         while enemy.is_alive() and player.is_alive():
             player_damage = player.calculate_attack()
             enemy.take_damage(player_damage)
@@ -13,8 +14,9 @@ class CombatManager:
             
             if not enemy.is_alive():
                 print(f"You defeated the {type(enemy).__name__}!")
-                player.add_experience(enemy.get_experience_reward())
-                player.add_loot(enemy.drop_loot())
+                profession.add_experience(enemy.get_experience_reward())
+                if enemy.is_lootable():
+                    player.add_loot(enemy.drop_loot())
                 self.combat_target = None
                 break
 

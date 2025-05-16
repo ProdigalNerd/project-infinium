@@ -28,3 +28,8 @@ class Forest(BaseLocation):
                 print(f"- {type(enemy).__name__}")
         else:
             print("The forest is quiet. You find nothing of interest.")
+
+    def get_first_enemy(self):
+        if self.enemies:
+            return self.enemies.pop(0)
+        return None
