@@ -1,5 +1,6 @@
 from tabulate import tabulate
 from console.command_registry import CommandRegistry
+from game.components.has_experience import HasExperience
 from game.components.has_shops import HasShops
 from game.components.health import HealthBar
 from game.database.models.character import Character
@@ -8,13 +9,10 @@ from game.managers.combat_manager import CombatManager
 from game.managers.location_manager import LocationManager
 from game.models.inventory.inventory import Inventory
 
-class Player(Character, HealthBar):
+class Player(Character, HealthBar, HasExperience):
     def __init__(self, name: str):
         HealthBar.__init__(self, 100)
         self.name = name
-        self.level = 1
-        self.experience = 0
-        self.experience_to_next_level = 100
         self.strength = 10
         self.intelligence = 10
         self.agility = 10
@@ -121,11 +119,6 @@ class Player(Character, HealthBar):
             if item:
                 self.currency += item.cost // 2
                 self.inventory.remove_item(item)
-
-    def add_experience(self, amount):
-        self.experience += amount
-        if self.experience >= self.experience_to_next_level:
-            print("You leveled up!")
 
     def add_loot(self, loot):
         if isinstance(loot, list):
