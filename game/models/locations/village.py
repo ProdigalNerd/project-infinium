@@ -4,7 +4,7 @@ from game.models.locations.base_location import BaseLocation
 
 class Village(BaseLocation, HasShops):
     def __init__(self, location_data):
-        HasShops.__init__(self, location_data['shops'])
+        HasShops.__init__(self, location_data['shops'] if 'shops' in location_data else [])
         self.id = location_data['id']
         self.name = location_data['name']
         self.description = location_data['description']
