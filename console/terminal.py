@@ -51,8 +51,8 @@ class Terminal:
 
     def run(self):
         os.system('cls' if os.name == 'nt' else 'clear')
-        print("Welcome to the terminal! Type 'help' for a list of commands.")
         while self.continue_running:
+            print("What would you like to do? Type 'help' for a list of commands.")
             command_input = input("> ").strip().lower()
             parts = command_input.split()
             if not parts:
@@ -63,6 +63,7 @@ class Terminal:
 
             command = self.command_registry.get_command(command_name)
             if command:
+                os.system('cls' if os.name == 'nt' else 'clear')
                 command.execute(self, *args)
             else:
                 print(f"Unknown command: {command_name}")

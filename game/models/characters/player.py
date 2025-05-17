@@ -1,5 +1,6 @@
 from tabulate import tabulate
 from console.command_registry import CommandRegistry
+from console.ui_manager import UIManager
 from game.components.has_experience import HasExperience
 from game.components.has_shops import HasShops
 from game.components.health import HealthBar
@@ -17,6 +18,7 @@ class Player(Character, HealthBar, HasExperience):
         self.strength = 10
         self.intelligence = 10
         self.agility = 10
+        self.ui_manager = UIManager()
         self.current_location = LocationManager().get_location_by_id(1)  # Assuming starting location is ID 1
         self.inventory = Inventory()
         self.command_registry = CommandRegistry()
@@ -38,18 +40,19 @@ class Player(Character, HealthBar, HasExperience):
         self.command_registry.register("view_inventory", "View your inventory", self.inventory.list_items)
 
     def display_stats(self):
-        stats = [
-            ["Name", self.name],
-            ["Location", self.current_location.name if self.current_location else "None"],
-            ["Level", self.level],
-            ["Health", f"{self.current_health}/{self.max_health}"],
-            ["Experience", f"{self.experience}/{self.experience_to_next_level}"],
-            ["Strength", self.strength],
-            ["Intelligence", self.intelligence],
-            ["Agility", self.agility],
-            ["Currency", self.currency],
-        ]
-        print(tabulate(stats, headers=["Attribute", "Value"], tablefmt="grid"))
+        self.ui_manager.render_player_stats(self)
+        # stats = [
+        #     ["Name", self.name],
+        #     ["Location", self.current_location.name if self.current_location else "None"],
+        #     ["Level", self.level],
+        #     ["Health", f"{self.current_health}/{self.max_health}"],
+        #     ["Experience", f"{self.experience}/{self.experience_to_next_level}"],
+        #     ["Strength", self.strength],
+        #     ["Intelligence", self.intelligence],
+        #     ["Agility", self.agility],
+        #     ["Currency", self.currency],
+        # ]
+        # print(tabulate(stats, headers=["Attribute", "Value"], tablefmt="grid"))
 
     def travel_to_location(self, location_name):
         location_manager = LocationManager()
