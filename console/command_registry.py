@@ -18,10 +18,6 @@ class CommandRegistry:
         self.commands[name] = Command(name, description, execute_fn, is_available_fn, has_extra_args)
 
     def get_command(self, name: str):
-        if name in self.commands:
-            print(f"Command found: {name}")
-        else:
-            print(f"Command not found: {name}")
         return self.commands.get(name)
     
     def remove_command(self, name: str):
