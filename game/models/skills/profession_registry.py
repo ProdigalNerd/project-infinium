@@ -1,4 +1,5 @@
 from __future__ import annotations  # Required for forward references in type hints
+from console.command_registry import CommandRegistry
 from game.models.skills.fighter import Fighter
 
 
@@ -7,6 +8,12 @@ class ProfessionRegistry:
         self._professions = {
             Fighter.__name__: Fighter(player),
         }
+        command_registry = CommandRegistry()
+        command_registry.register(
+            "list_professions",
+            "List all available professions",
+            self.list_professions,
+        )
 
     def list_professions(self):
         for profession in self._professions.values():
