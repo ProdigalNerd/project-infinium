@@ -2,8 +2,8 @@ from game.components.health import HealthBar
 
 
 class BaseEnemy(HealthBar):
-    def __init__(self):
-        HealthBar.__init__(self, 30)
+    def __init__(self, starting_health: int = 30):
+        HealthBar.__init__(self, starting_health)
         self.attack = 5
 
     def attack_player(self, player):

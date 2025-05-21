@@ -4,7 +4,7 @@ from game.models.items.base_item import BaseItem
 
 class Goblin(BaseEnemy):
     def __init__(self):
-        super().__init__()
+        super().__init__(starting_health=30)
 
     def attack_player(self, player):
         print(f"Goblin attacks {player.name} for {self.attack} damage!")
