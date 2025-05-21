@@ -1,12 +1,14 @@
 from __future__ import annotations  # Required for forward references in type hints
 from console.command_registry import CommandRegistry
 from game.models.skills.fighter import Fighter
+from game.models.skills.woodcutter import Woodcutter
 
 
 class ProfessionRegistry:
     def __init__(self, player: "Player"):
         self._professions = {
             Fighter.__name__: Fighter(player),
+            Woodcutter.__name__: Woodcutter(player),
         }
         command_registry = CommandRegistry()
         command_registry.register(

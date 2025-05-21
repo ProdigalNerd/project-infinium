@@ -13,6 +13,9 @@ class BaseLocation():
         self.coordinates = (location_data['coordinates']['x'], location_data['coordinates']['y'])
         self.type = LocationType[location_data['type'].upper()]
 
+    def get_type(self) -> LocationType:
+        return self.type
+
     def enter(self) -> None:
         """
         Abstract method to be implemented by subclasses.
