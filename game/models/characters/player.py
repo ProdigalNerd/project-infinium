@@ -1,4 +1,3 @@
-from tabulate import tabulate
 from console.command_registry import CommandRegistry
 from console.ui_manager import UIManager
 from game.components.has_experience import HasExperience
@@ -41,18 +40,6 @@ class Player(Character, HealthBar, HasExperience):
 
     def display_stats(self):
         self.ui_manager.render_player_stats(self)
-        # stats = [
-        #     ["Name", self.name],
-        #     ["Location", self.current_location.name if self.current_location else "None"],
-        #     ["Level", self.level],
-        #     ["Health", f"{self.current_health}/{self.max_health}"],
-        #     ["Experience", f"{self.experience}/{self.experience_to_next_level}"],
-        #     ["Strength", self.strength],
-        #     ["Intelligence", self.intelligence],
-        #     ["Agility", self.agility],
-        #     ["Currency", self.currency],
-        # ]
-        # print(tabulate(stats, headers=["Attribute", "Value"], tablefmt="grid"))
 
     def travel_to_location(self, location_name):
         location_manager = LocationManager()
