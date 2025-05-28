@@ -1,27 +1,47 @@
 from rich.console import Console
 from rich.table import Table
+from rich.layout import Layout
 from rich.panel import Panel
 
 class UIManager:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(UIManager, cls).__new__(cls)
+        return cls._instance
+    
     def __init__(self):
-        self.console = Console()
+        if not hasattr(self, 'initialized'):
+            self.console = Console()
+            self.layout = Layout()
 
-    def render_player_stats(self, player):
-        table = Table(title="Player Stats", show_header=True, header_style="bold magenta")
-        table.add_column("Attribute", style="dim")
-        table.add_column("Value", justify="right")
+            # Define the layout structure
+            self.layout.split_column(
+                Layout(name="player", size=3),
+                Layout(name="game"),
+            )
 
-        table.add_row("Name", player.name)
-        table.add_row("Location", player.current_location.name if player.current_location else "None")
-        table.add_row("Level", str(player.level))
-        table.add_row("Health", f"{player.current_health}/{player.max_health}")
-        table.add_row("Experience", f"{player.experience}/{player.experience_to_next_level}")
-        table.add_row("Strength", str(player.strength))
-        table.add_row("Intelligence", str(player.intelligence))
-        table.add_row("Agility", str(player.agility))
-        table.add_row("Currency", f"{player.currency} gold")
+            self.layout["game"].split_row(
+                Layout(name="player_stats", ratio=1),
+                Layout(name="game_content", ratio=2),
+            )
 
-        self.console.print(table)
+    def render(self):
+        """Render the entire UI."""
+        self.console.clear()
+        self.console.print(self.layout)
+
+    def update_player_stats(self, content):
+        self.layout["player_stats"].update(Panel(content, title="Player Stats"))
+
+    def update_game_content(self, content):
+        self.layout["game_content"].update(Panel(content, title="Game Content"))
+
+    def update_player(self, content):
+        self.layout["player"].update(Panel(content, title="Player Info"))
+
+    ## DELETE everything below this line ##
 
     def render_location(self, location):
         if location:

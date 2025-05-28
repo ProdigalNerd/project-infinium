@@ -2,6 +2,7 @@ import os
 
 from console.command_registry import CommandRegistry
 from console.game_manager import GameManager
+from console.ui_manager import UIManager
 
 class Terminal:
     _instance = None
@@ -17,9 +18,11 @@ class Terminal:
             self.protected_commands = ["help", "exit", "clear"]
             self.command_registry = CommandRegistry()
             self.game_manager = GameManager()
+            self.ui_manager = UIManager()
             self.clear_screen()
             self.game_manager.create_character()
             self.initialize_commands()
+            self.ui_manager.render()
 
     def initialize_commands(self):
         self.command_registry.register(
@@ -31,11 +34,6 @@ class Terminal:
             "help",
             "Displays available commands.",
             self.help
-        )
-        self.command_registry.register(
-            "clear",
-            "Clears the terminal screen.",
-            self.clear_screen
         )
 
     def clear_screen(self):
@@ -50,7 +48,6 @@ class Terminal:
         self.command_registry.list_commands()
 
     def run(self):
-        os.system('cls' if os.name == 'nt' else 'clear')
         while self.continue_running:
             print("What would you like to do? Type 'help' for a list of commands.")
             command_input = input("> ").strip().lower()
@@ -63,7 +60,8 @@ class Terminal:
 
             command = self.command_registry.get_command(command_name)
             if command:
-                os.system('cls' if os.name == 'nt' else 'clear')
                 command.execute(self, *args)
             else:
                 print(f"Unknown command: {command_name}")
+
+            self.ui_manager.render()

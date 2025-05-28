@@ -8,6 +8,8 @@ from game.enums.direction import Direction
 from game.managers.location_manager import LocationManager
 from game.models.inventory.inventory import Inventory
 from game.models.skills.profession_registry import ProfessionRegistry
+from rich.table import Table
+from rich.text import Text
 
 class Player(Character, HealthBar, HasExperience):
     def __init__(self, name: str):
@@ -22,8 +24,11 @@ class Player(Character, HealthBar, HasExperience):
         self.inventory = Inventory()
         self.command_registry = CommandRegistry()
         self.profession_registry = ProfessionRegistry(self)
+        self.ui_manager = UIManager()
         self.currency = 100
         self.initialize_commands()
+        self.render_player_info()
+        self.display_stats()
 
     def initialize_commands(self):
         self.command_registry.register("stats", "Display player stats", self.display_stats)
@@ -38,8 +43,27 @@ class Player(Character, HealthBar, HasExperience):
         self.command_registry.register("move", "Move in a direction", self.move_in_direction, has_extra_args=True)
         self.command_registry.register("view_inventory", "View your inventory", self.inventory.list_items)
 
+    def render_player_info(self):
+        text = Text(
+            f"Player: {self.name} | Level: {self.level} | Location: {self.current_location.name if self.current_location else 'None'}",
+            style="bold green",
+            justify="center"
+        )
+        self.ui_manager.update_player(text)
+
     def display_stats(self):
-        self.ui_manager.render_player_stats(self)
+        table = Table(show_header=True, header_style="bold magenta", expand=True)
+        table.add_column("Attribute", style="dim")
+        table.add_column("Value", justify="right")
+
+        table.add_row("Health", f"{self.current_health}/{self.max_health}")
+        table.add_row("Experience", f"{self.experience}/{self.experience_to_next_level}")
+        table.add_row("Strength", str(self.strength))
+        table.add_row("Intelligence", str(self.intelligence))
+        table.add_row("Agility", str(self.agility))
+        table.add_row("Currency", f"{self.currency} gold")
+
+        self.ui_manager.update_player_stats(table)
 
     def travel_to_location(self, location_name):
         location_manager = LocationManager()
