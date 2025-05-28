@@ -3,6 +3,7 @@ import os
 from console.command_registry import CommandRegistry
 from console.game_manager import GameManager
 from console.ui_manager import UIManager
+from rich.table import Table
 
 class Terminal:
     _instance = None
@@ -19,10 +20,10 @@ class Terminal:
             self.command_registry = CommandRegistry()
             self.game_manager = GameManager()
             self.ui_manager = UIManager()
-            self.clear_screen()
+            self.ui_manager.full_clear()
             self.game_manager.create_character()
             self.initialize_commands()
-            self.ui_manager.render()
+            self.help()
 
     def initialize_commands(self):
         self.command_registry.register(
@@ -36,18 +37,23 @@ class Terminal:
             self.help
         )
 
-    def clear_screen(self):
-        os.system('cls' if os.name == 'nt' else 'clear')
-
     def exit(self):
         print("Exiting the terminal. Goodbye!")
         self.continue_running = False
 
     def help(self):
-        print("Available commands:")
-        self.command_registry.list_commands()
+        commands = self.command_registry.get_commands()
+        table = Table(show_header=True, header_style="bold magenta", expand=True)
+        table.add_column("Command", style="dim")
+        table.add_column("Description", justify="left")
+        for command in commands:
+            if command.name not in self.protected_commands:
+                table.add_row(command.name, command.description)
+
+        self.ui_manager.update_game_content(table)
 
     def run(self):
+        self.ui_manager.render()
         while self.continue_running:
             print("What would you like to do? Type 'help' for a list of commands.")
             command_input = input("> ").strip().lower()

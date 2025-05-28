@@ -19,4 +19,3 @@ class GameManager:
     def create_character(self):
         name = input("Enter character name: ")
         self.player = Player(name)
-        print(f"Character '{name}' created!")

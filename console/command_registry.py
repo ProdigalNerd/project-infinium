@@ -24,7 +24,5 @@ class CommandRegistry:
         if name in self.commands:
             del self.commands[name]
 
-    def list_commands(self):
-        for command in sorted(self.commands.values(), key=lambda cmd: cmd.name):
-            if command.is_available_fn is None or command.is_available_fn():
-                print(f"{command.name}: {command.description}")
+    def get_commands(self):
+        return [command for command in self.commands.values() if command.is_available_fn is None or command.is_available_fn()]
