@@ -73,11 +73,13 @@ class Player(Character, HealthBar, HasExperience):
         return self.current_location
 
     def search_current_location(self):
-        self.current_location.search() # type: ignore
+        description = self.current_location.search() # type: ignore
+        self.ui_manager.update_game_content(description)
     
     def show_map(self):
         location_manager = LocationManager()
-        location_manager.generate_map()
+        map = location_manager.generate_map()
+        self.ui_manager.update_game_content(map)
     
     def move_in_direction(self, direction):
         location_manager = LocationManager()
@@ -90,11 +92,7 @@ class Player(Character, HealthBar, HasExperience):
             new_location = location_manager.get_location_by_coordinates(new_coordinates)
             if new_location:
                 self.current_location = new_location
-                print(f"Moved to {self.current_location.name}.")
-            else:
-                print("You can't go that way.")
-        else:
-            print("You are not in a location.")
+        self.render_player_info()
 
     def can_visit_shops(self):
         if isinstance(self.current_location, HasShops):

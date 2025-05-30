@@ -1,8 +1,9 @@
 from __future__ import annotations  # Required for forward references in type hints
 from console.command_registry import CommandRegistry
+from console.ui_manager import UIManager
 from game.models.skills.fighter import Fighter
 from game.models.skills.woodcutter import Woodcutter
-
+from rich.table import Table
 
 class ProfessionRegistry:
     def __init__(self, player: "Player"):
@@ -16,7 +17,20 @@ class ProfessionRegistry:
             "List all available professions",
             self.list_professions,
         )
+        self.ui_manager = UIManager()
 
     def list_professions(self):
+        table = Table(title="Available Professions")
+        table.add_column("Name", style="cyan", no_wrap=True)
+        table.add_column("Description", style="magenta")
+        table.add_column("Level", style="green", justify="center")
+        table.add_column("Experience", style="yellow", justify="center")
         for profession in self._professions.values():
-            print(f"Name: {profession.name}, Description: {profession.description}, Level: {profession.level}")
+            table.add_row(
+                profession.name,
+                profession.description,
+                str(profession.level),
+                str(profession.experience),
+            )
+        
+        self.ui_manager.update_game_content(table)

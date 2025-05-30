@@ -1,9 +1,13 @@
+from console.ui_manager import UIManager
 from game.models.inventory.inventory_item import InventoryItem
+from rich.table import Table
+from rich.text import Text as RichText
 
 
 class Inventory:
     def __init__(self):
         self.items = []
+        self.ui_manager = UIManager()
 
     def add_item(self, item):
         for existing_item in self.items:
@@ -24,11 +28,16 @@ class Inventory:
 
     def list_items(self):
         if self.items:
-            print("Inventory items:")
+            table = Table(title="Inventory Items")
+            table.add_column("Name", style="magenta")
+            table.add_column("Quantity", justify="right", style="green")
+
             for item in self.items:
-                print(f"- {item}")
+                table.add_row(item.name, str(item.quantity))
+
+            self.ui_manager.update_game_content(table)
         else:
-            print("Inventory is empty.")
+            self.ui_manager.update_game_content(RichText("Your inventory is empty.", style="bold red"))
 
     def sort_items(self):
         self.items.sort()

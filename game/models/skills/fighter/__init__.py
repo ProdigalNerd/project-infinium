@@ -26,3 +26,4 @@ class Fighter(Profession):
 
             combat_manager = CombatManager()
             combat_manager.initialize_combat(self.player_ref, self, enemy)
+        self.player_ref.display_stats()

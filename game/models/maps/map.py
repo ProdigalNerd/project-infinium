@@ -1,7 +1,6 @@
 from game.models.locations.base_location import BaseLocation
-from console.helpers.pad_colored_text import pad_colored_text
-
 from colorama import Fore, Style
+from rich.table import Table
 
 class Map:
     def __init__(self, existing_locations: list[BaseLocation] = []):
@@ -34,9 +33,10 @@ class Map:
                 grid[y - min_y][x - min_x] = location.name[0:5]  # Use the first 5 characters of the location name
 
         # Print the grid
-        print("Map of locations:")
-        row_separator = "-" * ((max_x - min_x + 1) * 12 - 3)  # Adjust length for cell width and separators
-        for i, row in enumerate(reversed(grid)):  # Reverse rows to display correctly in Cartesian coordinates
-            print(" | ".join(pad_colored_text(cell, 10) for cell in row))  # Print the row
-            if i < len(grid) - 1:  # Add a separator after each row except the last one
-                print(row_separator)
+        table = Table(show_header=False, box=None, padding=(0, 1))
+
+        # Add rows to the table
+        for row in reversed(grid):  # Reverse rows to display correctly in Cartesian coordinates
+            table.add_row(*row)
+
+        return table

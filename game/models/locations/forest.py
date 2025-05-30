@@ -1,6 +1,7 @@
 from game.models.locations.base_location import BaseLocation
 from game.models.characters.goblin import Goblin
 import random
+from rich.text import Text
 
 class Forest(BaseLocation):
     def __init__(self, location_data):
@@ -17,17 +18,23 @@ class Forest(BaseLocation):
         self.enemies = [Goblin() for _ in range(num_enemies)]
         pass
 
-    def describe(self):
-        print(self)
-
     def search(self):
-        self.describe()
+        name = Text(self.name, style="bold green", justify="left")
+        description = Text(self.description, style="dim", justify="left")
+        output = Text.assemble(
+            name,
+            "\n",
+            description,
+            "\n\n",
+            "You search the forest...",
+        )
         if self.enemies:
-            print("You encounter some enemies!")
+            output.append("\nYou encounter some enemies!")
             for enemy in self.enemies:
-                print(f"- {type(enemy).__name__}")
+                output.append(f"\n- {type(enemy).__name__}")
         else:
-            print("The forest is quiet. You find nothing of interest.")
+            output.append("\nYou find nothing of interest.")
+        return output
 
     def get_first_enemy(self):
         if self.enemies:
