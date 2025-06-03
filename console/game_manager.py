@@ -12,10 +12,14 @@ class GameManager:
     
     def __init__(self):
         if not hasattr(self, 'initialized'):
-            self.player = None
+            self.player = Player()
             self.location_manager = LocationManager()
             self.command_registry = CommandRegistry()
+            self.command_registry.register("create_character", "Create New Character", self.create_character, self.can_create_character)
+
+    def can_create_character(self):
+        return not self.player.name != "Player"
 
     def create_character(self):
         name = input("Enter character name: ")
-        self.player = Player(name)
+        self.player.set_name(name)

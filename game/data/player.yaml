@@ -1,0 +1,22 @@
+name: "Bearmetal"  # Replace with the player's name
+strength: 10
+agility: 10
+intelligence: 10
+level: 1
+experience: 0
+experience_to_next_level: 100  # Experience needed to reach the next level
+max_health: 100
+current_health: 100
+currency: 0  # Amount of currency the player has
+inventory:
+  items:  # List of item names
+    - item_id: 1
+      name: "Ore"
+      cost: 3
+      quantity: 5
+      stackable: True
+    - item_id: 2
+      name: "Wood"
+      cost: 2
+      quantity: 10
+      stackable: True

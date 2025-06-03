@@ -21,7 +21,6 @@ class Terminal:
             self.game_manager = GameManager()
             self.ui_manager = UIManager()
             self.ui_manager.full_clear()
-            self.game_manager.create_character()
             self.initialize_commands()
             self.help()
 

@@ -1,31 +1,65 @@
 from console.command_registry import CommandRegistry
 from console.ui_manager import UIManager
 from game.components.has_experience import HasExperience
+from game.components.has_persistence import HasPersistence
 from game.components.has_shops import HasShops
 from game.components.health import HealthBar
 from game.database.models.character import Character
 from game.enums.direction import Direction
 from game.managers.location_manager import LocationManager
 from game.models.inventory.inventory import Inventory
+from game.models.inventory.inventory_item import InventoryItem
+from game.models.items.base_item import BaseItem
 from game.models.skills.profession_registry import ProfessionRegistry
 from rich.table import Table
 from rich.text import Text
 
-class Player(Character, HealthBar, HasExperience):
-    def __init__(self, name: str):
-        HealthBar.__init__(self, 100)
-        HasExperience.__init__(self)
-        self.name = name
-        self.strength = 10
-        self.intelligence = 10
-        self.agility = 10
+class Player(Character, HasPersistence, HealthBar, HasExperience):
+    def __init__(self):
+        HasPersistence.__init__(self, "./game/data/player.yaml")
+
+        self.inventory = Inventory()
         self.ui_manager = UIManager()
         self.current_location = LocationManager().get_location_by_id(1)  # Assuming starting location is ID 1
-        self.inventory = Inventory()
         self.command_registry = CommandRegistry()
         self.profession_registry = ProfessionRegistry(self)
-        self.ui_manager = UIManager()
-        self.currency = 100
+
+        player_data = self.load_data()
+        # Load player data from persistence or initialize with default values
+        if player_data:
+            self.name = player_data.get("name", "Player")
+            self.currency = player_data.get("currency", 100)
+            self.strength = player_data.get("strength", 10)
+            self.intelligence = player_data.get("intelligence", 10)
+            self.agility = player_data.get("agility", 10)
+
+            level = player_data.get("level", 1)
+            experience = player_data.get("experience", 0)
+            experience_to_next_level = player_data.get("experience_to_next_level", 100)
+            HasExperience.__init__(self, experience, level, experience_to_next_level)
+
+            health = player_data.get("max_health", 100)
+            current_health = player_data.get("current_health", health)
+            HealthBar.__init__(self, current_health, health)
+
+            inventory = player_data.get("inventory", {})
+            inventory_items = inventory.get("items", [])
+            for item in inventory_items:
+                self.inventory.add_item(InventoryItem(
+                    item_id=item.get("item_id"),
+                    item=BaseItem(name=item.get("name"), cost=item.get("cost")),
+                    quantity=item.get("quantity", 1),
+                    stackable=item.get("stackable", True)
+                ))
+        else:
+            HealthBar.__init__(self, 100, 100)
+            HasExperience.__init__(self)
+            self.name = "Player"
+            self.strength = 10
+            self.intelligence = 10
+            self.agility = 10
+            self.currency = 100
+
         self.initialize_commands()
         self.render_player_info()
         self.display_stats()
@@ -64,6 +98,10 @@ class Player(Character, HealthBar, HasExperience):
         table.add_row("Currency", f"{self.currency} gold")
 
         self.ui_manager.update_player_stats(table)
+
+    def set_name(self, name):
+        self.name = name
+        self.render_player_info()
 
     def travel_to_location(self, location_name):
         location_manager = LocationManager()

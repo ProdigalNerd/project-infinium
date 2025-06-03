@@ -16,8 +16,11 @@ class Inventory:
                 print(f"Added {item} to inventory.")
                 return
         
+        if isinstance(item, InventoryItem):
+            self.items.append(item)
+            return
+        
         self.items.append(InventoryItem(len(self.items) + 1, item, 1))
-        print(f"Added {item} to inventory.")
 
     def remove_item(self, item):
         if item in self.items:
