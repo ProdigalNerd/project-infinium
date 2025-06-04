@@ -4,6 +4,7 @@ from console.ui_manager import UIManager
 from game.models.skills.blacksmith import Blacksmith
 from game.models.skills.miner import Miner
 from game.models.skills.fighter import Fighter
+from game.models.skills.woodcrafting import WoodCrafting
 from game.models.skills.woodcutter import Woodcutter
 from rich.table import Table
 
@@ -14,6 +15,7 @@ class ProfessionRegistry:
             Woodcutter.__name__: Woodcutter(player),
             Miner.__name__: Miner(player),
             Blacksmith.__name__: Blacksmith(player),
+            WoodCrafting.__name__: WoodCrafting(player),
         }
         command_registry = CommandRegistry()
         command_registry.register(
