@@ -1,6 +1,7 @@
 from __future__ import annotations  # Required for forward references in type hints
 from console.command_registry import CommandRegistry
 from console.ui_manager import UIManager
+from game.models.skills.blacksmith import Blacksmith
 from game.models.skills.miner import Miner
 from game.models.skills.fighter import Fighter
 from game.models.skills.woodcutter import Woodcutter
@@ -12,6 +13,7 @@ class ProfessionRegistry:
             Fighter.__name__: Fighter(player),
             Woodcutter.__name__: Woodcutter(player),
             Miner.__name__: Miner(player),
+            Blacksmith.__name__: Blacksmith(player),
         }
         command_registry = CommandRegistry()
         command_registry.register(
