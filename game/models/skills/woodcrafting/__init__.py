@@ -34,22 +34,20 @@ class WoodCrafting(Profession):
 
     def craft_item(self):
         self.list_recipes()
-        self.ui_manager.render()
         choice = int(input("Enter the number of the item you want to craft: "))
         if 0 <= choice < len(self.recipes):
             recipe = self.recipes[choice]
 
             update_text = Text(f"Crafting {recipe.name}...")
             self.ui_manager.update_game_content(update_text)
-            self.ui_manager.render()
             
-            CraftingManager().craft(recipe, self.player_ref.inventory)
+            crafting_manager = CraftingManager(self.ui_manager, update_text)
+            crafting_manager.craft(recipe, self.player_ref.inventory)
             
             update_text.append(f"\n{recipe.name} crafted successfully!")
             self.ui_manager.update_game_content(update_text)
-            self.ui_manager.render()
         else:
-            print("Invalid choice. Please select a valid recipe number.")
+            self.ui_manager.update_game_content(Text("You can't seem to remember that recipe."))
         
     def list_recipes(self):
         recipe_list = Text()

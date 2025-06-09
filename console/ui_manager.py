@@ -37,9 +37,12 @@ class UIManager:
 
     def update_player_stats(self, content):
         self.layout["player_stats"].update(Panel(content, title="Player Stats"))
+        self.render()
 
     def update_game_content(self, content):
         self.layout["game_content"].update(Panel(content, title="Game Content"))
+        self.render()
 
     def update_player(self, content):
         self.layout["player"].update(Panel(content, title="Player Info"))
+        self.render()
