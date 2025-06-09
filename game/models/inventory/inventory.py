@@ -9,10 +9,10 @@ class Inventory:
         self.items = []
         self.ui_manager = UIManager()
 
-    def add_item(self, item):
+    def add_item(self, item, quantity=1):
         for existing_item in self.items:
             if existing_item.name == item and existing_item.stackable:
-                existing_item.quantity += 1
+                existing_item.quantity += quantity
                 print(f"Added {item} to inventory.")
                 return
         
@@ -20,7 +20,13 @@ class Inventory:
             self.items.append(item)
             return
         
-        self.items.append(InventoryItem(len(self.items) + 1, item, 1))
+        self.items.append(InventoryItem(len(self.items) + 1, item, quantity))
+
+    def get_by_id(self, item_id):
+        for item in self.items:
+            if item.item_id == item_id:
+                return item
+        return None
 
     def remove_item(self, item):
         if item in self.items:
@@ -28,6 +34,19 @@ class Inventory:
             print(f"Removed {item} from inventory.")
         else:
             print(f"{item} not found in inventory.")
+
+    def remove_by_id(self, item_id, quantity=1):
+        item = self.get_by_id(item_id)
+        if item:
+            if item.quantity >= quantity:
+                item.quantity -= quantity
+                if item.quantity == 0:
+                    self.items.remove(item)
+                print(f"Removed {quantity} of {item.name} from inventory.")
+            else:
+                print(f"Not enough {item.name} to remove. Available: {item.quantity}, Requested: {quantity}.")
+        else:
+            print(f"Item with ID {item_id} not found in inventory.")
 
     def list_items(self):
         if self.items:

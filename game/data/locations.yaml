@@ -46,3 +46,11 @@
   coordinates:
     x: 1
     y: 0
+- id: 6
+  name: The Quiet Willowbrook
+  description: A Bustling village with cobblestone streets.
+  type: village
+  coordinates:
+    x: 1
+    y: 1
+  shops: []
