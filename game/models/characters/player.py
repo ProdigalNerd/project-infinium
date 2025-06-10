@@ -149,6 +149,7 @@ class Player(Character, HasPersistence, HealthBar, HasExperience):
         self.ui_manager.update_game_content(description)
     
     def show_map(self):
+        self.view_manager.set_active_view('show_map', self.show_map)
         location_manager = LocationManager()
         map = location_manager.generate_map()
         self.ui_manager.update_game_content(map)
