@@ -1,4 +1,5 @@
 from game.enums.location_type import LocationType
+from rich.text import Text
 
 
 class BaseLocation():
@@ -35,7 +36,7 @@ class BaseLocation():
     def __str__(self):
         return f"{self.name} ({self.coordinates}): {self.description}"
     
-    def search(self):
+    def search(self) -> Text:
         """
         Abstract method to be implemented by subclasses.
         This method should define what happens when a player searches the location.

@@ -7,7 +7,6 @@ class Goblin(BaseEnemy):
         super().__init__(starting_health=30)
 
     def attack_player(self, player):
-        print(f"Goblin attacks {player.name} for {self.attack} damage!")
         player.take_damage(self.attack)
 
     def get_loot(self):

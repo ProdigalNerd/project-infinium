@@ -1,6 +1,8 @@
 from game.components.has_shops import HasShops
 from game.enums.location_type import LocationType
 from game.models.locations.base_location import BaseLocation
+from rich.text import Text
+
 
 class Village(BaseLocation, HasShops):
     def __init__(self, location_data):
@@ -25,10 +27,15 @@ class Village(BaseLocation, HasShops):
         print(self)
 
     def search(self):
-        self.describe()
+        output = Text()
+        output.append(f"You are in {self.name}.\n", style="bold green")
+        output.append(f"{self.coordinates[0]}, {self.coordinates[1]}\n", style="bold cyan")
+        output.append(f"{self.description}\n")
         if self.shops:
-            print("Some shops are available!")
+            output.append("You find some shops in the village:\n", style="bold green")
             for shop in self.shops:
-                print(f"- {shop.name}")
+                output.append(f"- {shop.name}\n", style="bold blue")
         else:
-            print("The forest is quiet. You find nothing of interest.")
+            output.append("There are no shops in this village.", style="bold red")
+
+        return output

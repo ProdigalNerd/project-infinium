@@ -15,7 +15,6 @@ class UIManager:
         if not hasattr(self, 'initialized'):
             self.console = Console()
             self.layout = Layout()
-            print("Initializing UIManager...")
             # Define the layout structure
             self.layout.split_column(
                 Layout(name="player", size=3),

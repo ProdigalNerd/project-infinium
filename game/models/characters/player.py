@@ -139,7 +139,7 @@ class Player(Character, HasPersistence, HealthBar, HasExperience):
     
     def visit_shop(self):
         if isinstance(self.current_location, HasShops):
-            self.current_location.visit_shop()
+            self.current_location.visit_shop(self.ui_manager)
 
     def is_visiting_shop(self):
         if isinstance(self.current_location, HasShops):
@@ -156,16 +156,21 @@ class Player(Character, HasPersistence, HealthBar, HasExperience):
 
     def purchase_item(self):
         if isinstance(self.current_location, HasShops) and self.current_location.visiting_shop:
-            item = self.current_location.visiting_shop.get_item_to_purchase()
+            item = self.current_location.visiting_shop.get_item_to_purchase(self.ui_manager)
+
+            output = Text()
+
             if item:
                 if self.currency >= item.cost:
                     self.currency -= item.cost
                     self.inventory.add_item(item)
-                    print(f"Purchased {item.name} for {item.cost} gold.")
+                    output.append(f"Purchased {item.name} for {item.cost} gold.")
                 else:
-                    print("You don't have enough currency to purchase this item.")
+                    output.append("You don't have enough currency to purchase this item.")
             else:
-                print("No item selected.")
+                output.append("No item selected.")
+                
+            self.ui_manager.update_game_content(output)
     
     def sell_item(self):
         if isinstance(self.current_location, HasShops) and self.current_location.visiting_shop:

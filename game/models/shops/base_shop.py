@@ -1,4 +1,5 @@
 from game.models.items.base_item import BaseItem
+from rich.text import Text
 
 
 class BaseShop:
@@ -18,14 +19,21 @@ class BaseShop:
         for item in self.items:
             print(f"{item.name} - {item.cost} gold")
 
-    def get_item_to_purchase(self):
+    def get_item_to_purchase(self, ui_manager):
+        output = Text()
+        output.append(f"Welcome to {self.name}!\n")
+        output.append(self.description + "\n\n")
+
         if not self.items:
-            print("There are no items in this shop.")
+            output.append("There are no items available in this shop.")
+            ui_manager.update_game_content(output)
             return
 
-        print("Available items:")
+        output.append("Available items:\n")
         for index, item in enumerate(self.items, start=1):
-            print(f"{index}. {item.name}")
+            output.append(f"{index}. {item.name} - {item.cost} gold\n")
+
+        ui_manager.update_game_content(output)
 
         try:
             choice = int(input("Enter the number of the item you want to purchase: "))
@@ -33,7 +41,8 @@ class BaseShop:
                 item = self.items[choice - 1]
                 return item
             else:
-                print("Invalid choice. Please select a valid shop number.")
+                output.append("Invalid choice. Please select a valid item number.")
         except ValueError:
-            print("Invalid input. Please enter a number.")
+            output.append("Invalid input. Please enter a number.")
+        
         return None
