@@ -145,8 +145,11 @@ class Player(Character, HasPersistence, HealthBar, HasExperience):
         return self.current_location
 
     def search_current_location(self):
-        description = self.current_location.search() # type: ignore
-        self.ui_manager.update_game_content(description)
+        output, summary = self.current_location.search() # type: ignore
+        if summary:
+            self.log_event(summary)
+        self.ui_manager.update_game_content(output)
+        self.view_manager.notify('event_log')
     
     def show_map(self):
         self.view_manager.set_active_view('show_map', self.show_map)

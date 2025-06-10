@@ -31,11 +31,13 @@ class Village(BaseLocation, HasShops):
         output.append(f"You are in {self.name}.\n", style="bold green")
         output.append(f"{self.coordinates[0]}, {self.coordinates[1]}\n", style="bold cyan")
         output.append(f"{self.description}\n")
+        summary = f'You searched {self.name}'
         if self.shops:
             output.append("You find some shops in the village:\n", style="bold green")
             for shop in self.shops:
                 output.append(f"- {shop.name}\n", style="bold blue")
+            summary += f' and found {len(self.shops)} shop(s)'
         else:
             output.append("There are no shops in this village.", style="bold red")
-
-        return output
+            summary += ' but found no shops'
+        return output, summary
