@@ -122,6 +122,8 @@ class Player(Character, HasPersistence, HealthBar, HasExperience):
     def get_current_location(self):
         return self.current_location
 
+    # TODO: after rendering the output of the search, if the user provides a different command that doesn't automatically update the view,
+    # switch the view back to the default view (as it currently just stays on the search_current_location view until you change it via a command)
     def search_current_location(self):
         output, summary = self.current_location.search() # type: ignore
         # Set the active view to the search_current_location view and update the game content
