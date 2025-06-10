@@ -13,6 +13,7 @@ from game.models.items.base_item import BaseItem
 from game.models.skills.profession_registry import ProfessionRegistry
 from rich.table import Table
 from rich.text import Text
+from rich.panel import Panel
 
 class Player(Character, HasPersistence, HealthBar, HasExperience):
     class ViewManager:
@@ -45,13 +46,7 @@ class Player(Character, HasPersistence, HealthBar, HasExperience):
         self.view_manager = self.ViewManager()
         # Subscribe views to attributes, but only one will be active at a time
         self.view_manager.subscribe('location', self.show_map, 'show_map')
-        self.view_manager.subscribe('location', self.quick_view, 'quick_view')
-        self.view_manager.subscribe('event_log', self.quick_view, 'quick_view')
-        self.view_manager.subscribe('currency', self.quick_view, 'quick_view')
-        self.view_manager.subscribe('experience', self.quick_view, 'quick_view')
-        self.view_manager.subscribe('current_health', self.quick_view, 'quick_view')
-        self.view_manager.subscribe('max_health', self.quick_view, 'quick_view')
-        self.view_manager.subscribe('level', self.quick_view, 'quick_view')
+        self.view_manager.subscribe('event_log', self.event_log_view, 'event_log_view')
 
         player_data = self.load_data()
         # Load player data from persistence or initialize with default values
@@ -105,7 +100,7 @@ class Player(Character, HasPersistence, HealthBar, HasExperience):
         self.command_registry.register("map", "Show the map of the current location", self.show_map)
         self.command_registry.register("move", "Move in a direction", self.move_in_direction, has_extra_args=True)
         self.command_registry.register("view_inventory", "View your inventory", self.inventory.list_items)
-        self.command_registry.register("qv", "Show quick view dashboard", self.quick_view)
+        self.command_registry.register("event_log", "Show the event log", self.event_log_view)
 
     def render_player_info(self):
         text = Text(
@@ -230,21 +225,12 @@ class Player(Character, HasPersistence, HealthBar, HasExperience):
     def calculate_attack(self):
         return self.strength
 
-    def quick_view(self):
-        self.view_manager.set_active_view('quick_view', self.quick_view)
-        from rich.table import Table
-        from rich.panel import Panel
-        from rich.text import Text
-        # Abbreviated stats
-        stats = f"HP: {self.current_health}/{self.max_health} | LVL: {self.level} | XP: {self.experience}/{self.experience_to_next_level} | Gold: {self.currency}"
-        location = f"Location: {self.current_location.name if self.current_location else 'None'}"
+    def event_log_view(self):
+        self.view_manager.set_active_view('event_log_view', self.event_log_view)
         # Recent events (last 5)
         events = self.event_log[-5:] if self.event_log else ["No recent events."]
         events_text = '\n'.join(f"- {event}" for event in events)
-        # Build the quick view panel
         table = Table.grid(expand=True)
-        table.add_row(Text(stats, style="bold green"))
-        table.add_row(Text(location, style="bold cyan"))
         table.add_row(Panel(events_text, title="Recent Events", border_style="magenta"))
         self.ui_manager.update_game_content(table)
         self.ui_manager.render()
