@@ -233,7 +233,6 @@ class Player(Character, HasPersistence, HealthBar, HasExperience):
         table = Table.grid(expand=True)
         table.add_row(Panel(events_text, title="Recent Events", border_style="magenta"))
         self.ui_manager.update_game_content(table)
-        self.ui_manager.render()
 
     def log_event(self, message: str):
         self.event_log.append(message)
