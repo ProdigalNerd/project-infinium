@@ -136,6 +136,10 @@ class Player(Character, HasPersistence, HealthBar, HasExperience):
     def travel_to_location(self, location_name):
         location_manager = LocationManager()
         self.current_location = location_manager.get_location_by_name(location_name)
+        self.view_manager.notify('location')
+        
+        self.log_event(f'You traveled to {self.current_location.name}')
+        self.view_manager.notify('event_log')
 
     def get_current_location(self):
         return self.current_location
@@ -160,6 +164,9 @@ class Player(Character, HasPersistence, HealthBar, HasExperience):
             new_location = location_manager.get_location_by_coordinates(new_coordinates)
             if new_location:
                 self.current_location = new_location
+                self.log_event(f'You moved {direction_to_move.name} towards {self.current_location.name}')
+                self.view_manager.notify('location')
+                self.view_manager.notify('event_log')
         self.render_player_info()
 
     def can_visit_shops(self):
