@@ -13,6 +13,8 @@ from game.models.items.base_item import BaseItem
 from game.models.skills.profession_registry import ProfessionRegistry
 from rich.table import Table
 from rich.text import Text
+from rich.panel import Panel
+from game.managers.view_manager import ViewManager
 
 class Player(Character, HasPersistence, HealthBar, HasExperience):
     def __init__(self):
@@ -20,9 +22,14 @@ class Player(Character, HasPersistence, HealthBar, HasExperience):
 
         self.inventory = Inventory()
         self.ui_manager = UIManager()
+        self.view_manager = ViewManager()
         self.current_location = LocationManager().get_location_by_id(1)  # Assuming starting location is ID 1
         self.command_registry = CommandRegistry()
         self.profession_registry = ProfessionRegistry(self)
+        
+        self.event_log = []
+        self.view_manager.subscribe('location', self.show_map, 'show_map')
+        self.view_manager.subscribe('event_log', self.event_log_view, 'event_log_view')
 
         player_data = self.load_data()
         # Load player data from persistence or initialize with default values
@@ -76,6 +83,7 @@ class Player(Character, HasPersistence, HealthBar, HasExperience):
         self.command_registry.register("map", "Show the map of the current location", self.show_map)
         self.command_registry.register("move", "Move in a direction", self.move_in_direction, has_extra_args=True)
         self.command_registry.register("view_inventory", "View your inventory", self.inventory.list_items)
+        self.command_registry.register("event_log", "Show the event log", self.event_log_view)
 
     def render_player_info(self):
         text = Text(
@@ -106,15 +114,24 @@ class Player(Character, HasPersistence, HealthBar, HasExperience):
     def travel_to_location(self, location_name):
         location_manager = LocationManager()
         self.current_location = location_manager.get_location_by_name(location_name)
+        self.view_manager.notify('location')
+        
+        self.log_event(f'You traveled to {self.current_location.name}')
+        self.view_manager.notify('event_log')
 
     def get_current_location(self):
         return self.current_location
 
     def search_current_location(self):
-        description = self.current_location.search() # type: ignore
-        self.ui_manager.update_game_content(description)
+        output, summary = self.current_location.search() # type: ignore
+        # Set the active view to the search_current_location view and update the game content
+        self.view_manager.set_active_view('search_current_location', lambda: self.ui_manager.update_game_content(output))
+        if summary:
+            self.log_event(summary)
+        self.view_manager.notify('event_log')
     
     def show_map(self):
+        self.view_manager.set_active_view('show_map', self.show_map)
         location_manager = LocationManager()
         map = location_manager.generate_map()
         self.ui_manager.update_game_content(map)
@@ -130,6 +147,9 @@ class Player(Character, HasPersistence, HealthBar, HasExperience):
             new_location = location_manager.get_location_by_coordinates(new_coordinates)
             if new_location:
                 self.current_location = new_location
+                self.log_event(f'You moved {direction_to_move.name} towards {self.current_location.name}')
+                self.view_manager.notify('location')
+                self.view_manager.notify('event_log')
         self.render_player_info()
 
     def can_visit_shops(self):
@@ -188,3 +208,18 @@ class Player(Character, HasPersistence, HealthBar, HasExperience):
 
     def calculate_attack(self):
         return self.strength
+
+    def event_log_view(self):
+        self.view_manager.set_active_view('event_log_view', self.event_log_view)
+        # Recent events (last 5)
+        events = self.event_log[-5:] if self.event_log else ["No recent events."]
+        events_text = '\n'.join(f"- {event}" for event in events)
+        table = Table.grid(expand=True)
+        table.add_row(Panel(events_text, title="Recent Events", border_style="magenta"))
+        self.ui_manager.update_game_content(table)
+
+    def log_event(self, message: str):
+        self.event_log.append(message)
+        if len(self.event_log) > 20:
+            self.event_log = self.event_log[-20:]
+        self.view_manager.notify('event_log')

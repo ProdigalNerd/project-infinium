@@ -28,13 +28,16 @@ class Forest(BaseLocation):
             "\n\n",
             "You search the forest...",
         )
+        summary = f'You searched {self.name}'
         if self.enemies:
             output.append("\nYou encounter some enemies!")
             for enemy in self.enemies:
                 output.append(f"\n- {type(enemy).__name__}")
+            summary += f' and encountered {len(self.enemies)} enemies'
         else:
             output.append("\nYou find nothing of interest.")
-        return output
+            summary += ' but found nothing of interest'
+        return output, summary
 
     def get_first_enemy(self):
         if self.enemies:
