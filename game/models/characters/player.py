@@ -122,6 +122,8 @@ class Player(Character, HasPersistence, HealthBar, HasExperience):
     def get_current_location(self):
         return self.current_location
 
+    # TODO: after rendering the output of the search, if the user provides a different command that doesn't automatically update the view,
+    # switch the view back to the default view (as it currently just stays on the search_current_location view until you change it via a command)
     def search_current_location(self):
         output, summary = self.current_location.search() # type: ignore
         # Set the active view to the search_current_location view and update the game content
@@ -212,7 +214,7 @@ class Player(Character, HasPersistence, HealthBar, HasExperience):
     def event_log_view(self):
         self.view_manager.set_active_view('event_log_view', self.event_log_view)
         # Recent events (last 5)
-        events = self.event_log[-5:] if self.event_log else ["No recent events."]
+        events = self.event_log[-10:] if self.event_log else ["No recent events."]
         events_text = '\n'.join(f"- {event}" for event in events)
         table = Table.grid(expand=True)
         table.add_row(Panel(events_text, title="Recent Events", border_style="magenta"))
