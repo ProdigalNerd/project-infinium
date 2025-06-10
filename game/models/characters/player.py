@@ -14,37 +14,20 @@ from game.models.skills.profession_registry import ProfessionRegistry
 from rich.table import Table
 from rich.text import Text
 from rich.panel import Panel
+from game.managers.view_manager import ViewManager
 
 class Player(Character, HasPersistence, HealthBar, HasExperience):
-    class ViewManager:
-        def __init__(self):
-            self.subscribers = {}
-            self.active_view = None
-            self.active_callback = None
-        def subscribe(self, attribute, callback, view_name):
-            if attribute not in self.subscribers:
-                self.subscribers[attribute] = {}
-            self.subscribers[attribute][view_name] = callback
-        def set_active_view(self, view_name, callback):
-            self.active_view = view_name
-            self.active_callback = callback
-        def notify(self, attribute):
-            if attribute in self.subscribers and self.active_view in self.subscribers[attribute]:
-                self.subscribers[attribute][self.active_view]()
-            elif self.active_callback:
-                self.active_callback()
-
     def __init__(self):
         HasPersistence.__init__(self, "./game/data/player.yaml")
 
         self.inventory = Inventory()
         self.ui_manager = UIManager()
+        self.view_manager = ViewManager()
         self.current_location = LocationManager().get_location_by_id(1)  # Assuming starting location is ID 1
         self.command_registry = CommandRegistry()
         self.profession_registry = ProfessionRegistry(self)
-        self.event_log = []  # Add a simple event log
-        self.view_manager = self.ViewManager()
-        # Subscribe views to attributes, but only one will be active at a time
+        
+        self.event_log = []
         self.view_manager.subscribe('location', self.show_map, 'show_map')
         self.view_manager.subscribe('event_log', self.event_log_view, 'event_log_view')
 
