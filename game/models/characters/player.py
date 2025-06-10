@@ -212,7 +212,7 @@ class Player(Character, HasPersistence, HealthBar, HasExperience):
     def event_log_view(self):
         self.view_manager.set_active_view('event_log_view', self.event_log_view)
         # Recent events (last 5)
-        events = self.event_log[-5:] if self.event_log else ["No recent events."]
+        events = self.event_log[-10:] if self.event_log else ["No recent events."]
         events_text = '\n'.join(f"- {event}" for event in events)
         table = Table.grid(expand=True)
         table.add_row(Panel(events_text, title="Recent Events", border_style="magenta"))
