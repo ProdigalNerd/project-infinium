@@ -1,6 +1,3 @@
-from operator import is_
-
-
 class HasExperience:
     def __init__(
         self,
