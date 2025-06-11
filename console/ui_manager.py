@@ -18,7 +18,7 @@ class UIManager:
             # Define the layout structure
             self.layout.split_column(
                 Layout(name="player", size=3),
-                Layout(name="game"),
+                Layout(name="game", minimum_size=10),
             )
 
             self.layout["game"].split_row(
