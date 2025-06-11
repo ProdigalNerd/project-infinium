@@ -7,8 +7,12 @@ from game.models.skills.profession import Profession
 
 
 class Miner(Profession):
-    def __init__(self, player: "Player"):
-        super().__init__(name="Miner", description="A master of cutting trees and gathering wood.")
+    def __init__(self, player: "Player", level_cap_callback):
+        super().__init__(
+            name="Miner",
+            description="A master of cutting trees and gathering wood.",
+            level_cap_callback=level_cap_callback
+            )
         self.player_ref = player
         self.exp_per_log = 10
         self.attempts_per_action = 3

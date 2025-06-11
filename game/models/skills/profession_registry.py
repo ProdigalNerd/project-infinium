@@ -7,15 +7,17 @@ from game.models.skills.fighter import Fighter
 from game.models.skills.woodcrafting import WoodCrafting
 from game.models.skills.woodcutter import Woodcutter
 from rich.table import Table
+from rich.text import Text
+
 
 class ProfessionRegistry:
     def __init__(self, player: "Player"):
         self._professions = {
-            Fighter.__name__: Fighter(player),
-            Woodcutter.__name__: Woodcutter(player),
-            Miner.__name__: Miner(player),
-            Blacksmith.__name__: Blacksmith(player),
-            WoodCrafting.__name__: WoodCrafting(player),
+            Fighter.__name__: Fighter(player, level_cap_callback=self.award_limit_break_points),
+            Woodcutter.__name__: Woodcutter(player, level_cap_callback=self.award_limit_break_points),
+            Miner.__name__: Miner(player, level_cap_callback=self.award_limit_break_points),
+            Blacksmith.__name__: Blacksmith(player, level_cap_callback=self.award_limit_break_points),
+            WoodCrafting.__name__: WoodCrafting(player, level_cap_callback=self.award_limit_break_points),
         }
         command_registry = CommandRegistry()
         command_registry.register(
@@ -24,6 +26,13 @@ class ProfessionRegistry:
             self.list_professions,
         )
         self.ui_manager = UIManager()
+        self.limit_break_points = 0
+
+    def award_limit_break_points(self):
+        self.limit_break_points += 1
+        self.ui_manager.update_game_content(
+            Text(f"You have been awarded a limit break point! Total: {self.limit_break_points}")
+        )
 
     def list_professions(self):
         table = Table(title="Available Professions")
@@ -40,3 +49,21 @@ class ProfessionRegistry:
             )
         
         self.ui_manager.update_game_content(table)
+
+    def limit_break_profession(self, profession_name: str):
+        if profession_name in self._professions and self.limit_break_points > 0:
+            profession = self._professions[profession_name]
+            if profession.is_max_level():
+                profession.increase_max_level(25)
+                self.limit_break_points += 1
+                self.ui_manager.update_game_content(
+                    Text(f"{profession.name} has been limit broken! New max level is {profession.max_level}.")
+                )
+            else:
+                self.ui_manager.update_game_content(
+                    Text(f"{profession.name} is not at max level yet.")
+                )
+        else:
+            self.ui_manager.update_game_content(
+                Text(f"Profession {profession_name} not found.")
+            )
