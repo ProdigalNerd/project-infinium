@@ -3,8 +3,12 @@ from game.models.skills.profession import Profession
 
 
 class Blacksmith(Profession):
-    def __init__(self, player: "Player"):
-        super().__init__(name="Blacksmith", description="A master of crafting and repairing weapons and armor.")
+    def __init__(self, player: "Player", level_cap_callback):
+        super().__init__(
+            name="Blacksmith",
+            description="A master of crafting and repairing weapons and armor.",
+            level_cap_callback=level_cap_callback
+            )
         self.player_ref = player
         self.exp_per_item = 20
         self.attempts_per_action = 2

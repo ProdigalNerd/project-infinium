@@ -6,8 +6,12 @@ from game.models.skills.profession import Profession
 
 
 class Fighter(Profession):
-    def __init__(self, player: "Player"):
-        super().__init__(name="Fighter", description="A master of combat and physical prowess.")
+    def __init__(self, player: "Player", level_cap_callback):
+        super().__init__(
+            name="Fighter",
+            description="A master of combat and physical prowess.",
+            level_cap_callback=level_cap_callback
+            )
         self.player_ref = player
         self.ui_manager = UIManager()
 

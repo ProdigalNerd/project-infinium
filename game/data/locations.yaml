@@ -54,3 +54,62 @@
     x: 1
     y: 1
   shops: []
+- id: 7
+  name: Endless Windmere Plains
+  description: A Endless expanse of plains with grazing herds.
+  type: plains
+  coordinates:
+    x: 2
+    y: 1
+- id: 8
+  name: The Rolling Meadowvale
+  description: An open plain known for scattered wildflowers.
+  type: plains
+  coordinates:
+    x: 2
+    y: 2
+- id: 9
+  name: The Charming Rivermill
+  description: A Quiet hamlet known for friendly locals.
+  type: village
+  coordinates:
+    x: 2
+    y: 3
+  shops: []
+- id: 10
+  name: Charming Greendale
+  description: A Peaceful village with a winding river.
+  type: village
+  coordinates:
+    x: 1
+    y: 3
+  shops: []
+- id: 11
+  name: Endless Windmere Plains
+  description: A Vast expanse of plains with grazing herds.
+  type: plains
+  coordinates:
+    x: -1
+    y: 2
+- id: 12
+  name: Peaceful Ashford
+  description: A Quiet hamlet known for cobblestone streets.
+  type: village
+  coordinates:
+    x: -2
+    y: 2
+  shops: []
+- id: 13
+  name: Endless Sunridge Plains
+  description: An open plain known for grazing herds.
+  type: plains
+  coordinates:
+    x: -2
+    y: 1
+- id: 14
+  name: Ancient Dark Hollow Forest
+  description: A serene forest with vibrant greenery.
+  type: forest
+  coordinates:
+    x: -2
+    y: 0
