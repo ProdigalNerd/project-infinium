@@ -43,3 +43,4 @@ class Forest(BaseLocation):
         if self.enemies:
             return self.enemies.pop(0)
         return None
+    

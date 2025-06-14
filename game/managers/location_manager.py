@@ -7,6 +7,7 @@ from game.generators.random_location import RandomLocation
 from game.models.maps.map import Map
 from rich.table import Table
 
+
 class LocationManager(HasPersistence):
     _instance = None
 
@@ -78,8 +79,9 @@ class LocationManager(HasPersistence):
         print("You have discovered a new location!")
         
         location_generator = RandomLocation(coordinates[0], coordinates[1])
-        neighbor_types = self.get_locatin_neighbor_types(coordinates)
-        new_location = location_generator.build(neighbor_types, id=len(self.locations) + 1)
+        # neighbor_types = self.get_locatin_neighbor_types(coordinates)
+        new_location = location_generator.build(self.get_neibhoring_locations(coordinates), id=len(self.locations) + 1)
+        # new_location = location_generator.build(neighbor_types, id=len(self.locations) + 1)
         self.save_new_location(new_location)
         self.locations.append(new_location)
 
@@ -93,6 +95,15 @@ class LocationManager(HasPersistence):
             elif abs(location.coordinates[1] - coordinates[1]) == 1 and location.coordinates[0] == coordinates[0]:
                 neighbor_types.append(location.type)
         return neighbor_types
+    
+    def get_neibhoring_locations(self, coordinates):
+        neighboring_locations = []
+        for location in self.locations:
+            if (abs(location.coordinates[0] - coordinates[0]) == 1 and location.coordinates[1] == coordinates[1]) or \
+               (abs(location.coordinates[1] - coordinates[1]) == 1 and location.coordinates[0] == coordinates[0]) or \
+               (abs(location.coordinates[0] - coordinates[0]) == 1 and abs(location.coordinates[1] - coordinates[1]) == 1):
+                neighboring_locations.append(location)
+        return neighboring_locations
 
     def save_new_location(self, location):
         self.save_data(location)

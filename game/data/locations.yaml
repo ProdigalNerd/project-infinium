@@ -1,115 +1,73 @@
 - id: 1
-  name: Hometown
-  description: A small, quiet town where you grew up. The streets are lined with familiar houses and shops, and the air is filled with the scent of home-cooked meals.
+  name: "Willowbrook"
+  description: >
+    Nestled at the gentle foot of rolling green hills, Willowbrook is a humble village where time
+    slows down and the air is thick with the scent of wildflowers and fresh bread. Weathered cobblestone
+    paths wind through clusters of quaint cottages, their thatched roofs and colorful shutters adding
+    charm to the landscape. A central square hosts a bustling marketplace, where villagers gather for
+    trade and storytelling, while the sound of a small bell from the town well marks the heartbeat
+    of everyday life.
   type: village
   coordinates:
     x: 0
     y: 0
   shops:
-    - name: General Store
-      items:
-        - name: Health Potion
-          cost: 10
-        - name: Mana Potion
-          cost: 15
-    - name: Blacksmith
-      items:
-        - name: Iron Sword
-          cost: 50
-        - name: Wooden Shield
-          cost: 30
+    - name: "The Thirsty Thistle"
+      description: >
+        A cozy tavern with a warm hearth and low, wooden beams, the Thirsty Thistle is where villagers
+        come to unwind and exchange news.
+      types_of_items: "Local ale, simple meals, and friendly conversation."
+      owner:
+        owner_name: "Mara Glenwood"
+        owner_description: >
+          Mara is a woman in her late thirties with warm hazel eyes and a ready smile. Her demeanor
+          is jovial and welcoming, and she exudes a natural charisma that draws people in.
+        owner_greeting: >
+          Welcome, traveler! Sit ye down and sip on some of Willowbrook's finest — Mara's special
+          blend!
+    - name: "Willow's Wonders"
+      description: >
+        A small but vibrant shop filled with handcrafted trinkets, charms, and basic jewelry, crafted
+        by local artisans and sometimes, by Mara herself.
+      types_of_items: "Jewelry, charms, talismans, and handcrafted trinkets."
+      owner:
+        owner_name: "Eldon Weaver"
+        owner_description: >
+          Eldon is a sprightly man in his early sixties, with twinkling blue eyes and a face marked
+          by years of smiling and craftsmanship. He has a quick wit and an intuitive understanding of
+          his craft, often eager to share stories behind his creations.
+        owner_greeting: >
+          Ah! Welcome, friend! Care to see something that might just bring you luck?
+
 - id: 2
-  name: Windswept Goldhaven Plains
-  description: A Endless expanse of plains with swaying grasses.
+  name: Vast Plains
+  description: "As you step into the expansive plains, the horizon stretches wide,\
+    \ where the sky kisses the earth in a seamless blend of blue and gold. Tall grasses\
+    \ wave gently in the breeze, like a sea of emerald rippling under the sun's warm\
+    \ embrace. Wildflowers, dots of color scattered across the landscape, create a\
+    \ vibrant tapestry of yellows, purples, and whites, their sweet fragrances mingling\
+    \ in the crisp air, inviting bees and butterflies to dance from bloom to bloom.\n\
+    \nIn the distance, a faint outline of rolling hills breaks the otherwise undulating\
+    \ terrain. A solitary tree stands tall against the sky, its gnarled branches providing\
+    \ a stark silhouette as clouds lazily drift by overhead. Closer by, you can spot\
+    \ a shimmering stream winding its way through the grasslands, its clear waters\
+    \ bubbling softly, harmonizing with the gentle whispers of the wind.\n\nThe weather\
+    \ here is mild, with a gentle sun casting a golden hue over the fields. It feels\
+    \ rejuvenating yet warm, with sporadic gusts of wind that bring with them the\
+    \ earthy scent of soil, rich and fertile. As the sun begins to set, the air cools\
+    \ ever so slightly, and the colors of the sky transition into hues of orange and\
+    \ purple, creating a breathtaking backdrop to your surroundings.\n\nSounds envelop\
+    \ you\u2014birds chirping melodiously from hidden nests, the rustling of grass\
+    \ as small creatures scurry, and every now and then, the distant call of a hawk\
+    \ soaring above. Occasionally, the low rumble of thunder can be heard as dark\
+    \ clouds gather on the distant horizon, a reminder of the stormy weather that\
+    \ can sweep across the plains in an instant.\n\nHere, life is abundant: deer graze\
+    \ peacefully, their ears flicking at each sound; rabbits dart through the underbrush;\
+    \ and you may even catch a glimpse of a coyote lurking in the distance, its coat\
+    \ blending seamlessly with the golden field. The plains breathe a rhythm of their\
+    \ own, pulsing with the vitality of nature, inviting you to explore their vastness,\
+    \ each step echoing the promise of adventure ahead."
   type: plains
   coordinates:
     x: 0
     y: 1
-- id: 3
-  name: Horizon Fields
-  description: An open plain known for distant horizons.
-  type: plains
-  coordinates:
-    x: 0
-    y: 2
-- id: 4
-  name: Shadowwood Grove
-  description: A Shadowy forest filled with a babbling brook.
-  type: forest
-  coordinates:
-    x: 1
-    y: 2
-- id: 5
-  name: Silverleaf Grove
-  description: A Serene forest filled with towering trees.
-  type: forest
-  coordinates:
-    x: 1
-    y: 0
-- id: 6
-  name: The Quiet Willowbrook
-  description: A Bustling village with cobblestone streets.
-  type: village
-  coordinates:
-    x: 1
-    y: 1
-  shops: []
-- id: 7
-  name: Endless Windmere Plains
-  description: A Endless expanse of plains with grazing herds.
-  type: plains
-  coordinates:
-    x: 2
-    y: 1
-- id: 8
-  name: The Rolling Meadowvale
-  description: An open plain known for scattered wildflowers.
-  type: plains
-  coordinates:
-    x: 2
-    y: 2
-- id: 9
-  name: The Charming Rivermill
-  description: A Quiet hamlet known for friendly locals.
-  type: village
-  coordinates:
-    x: 2
-    y: 3
-  shops: []
-- id: 10
-  name: Charming Greendale
-  description: A Peaceful village with a winding river.
-  type: village
-  coordinates:
-    x: 1
-    y: 3
-  shops: []
-- id: 11
-  name: Endless Windmere Plains
-  description: A Vast expanse of plains with grazing herds.
-  type: plains
-  coordinates:
-    x: -1
-    y: 2
-- id: 12
-  name: Peaceful Ashford
-  description: A Quiet hamlet known for cobblestone streets.
-  type: village
-  coordinates:
-    x: -2
-    y: 2
-  shops: []
-- id: 13
-  name: Endless Sunridge Plains
-  description: An open plain known for grazing herds.
-  type: plains
-  coordinates:
-    x: -2
-    y: 1
-- id: 14
-  name: Ancient Dark Hollow Forest
-  description: A serene forest with vibrant greenery.
-  type: forest
-  coordinates:
-    x: -2
-    y: 0

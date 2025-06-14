@@ -1,3 +1,4 @@
+from game.enums.direction import Direction
 from game.enums.location_type import LocationType
 from rich.text import Text
 
@@ -35,6 +36,40 @@ class BaseLocation():
     
     def __str__(self):
         return f"{self.name} ({self.coordinates}): {self.description}"
+    
+    def long_description(self):
+        return f'{self.name} is a {self.type.value}. {self.description}'
+    
+    def direction_from_location(self, other_coordinates):
+        """
+        Calculate the direction from this location to another location based on coordinates.
+        Returns a string indicating the direction.
+        """
+        dx = other_coordinates[0] - self.coordinates[0]
+        dy = other_coordinates[1] - self.coordinates[1]
+
+        if dx > 0:
+            x_direction = Direction.EAST.value
+        elif dx < 0:
+            x_direction = Direction.WEST.value
+        else:
+            x_direction = ""
+
+        if dy > 0:
+            y_direction = Direction.NORTH.value
+        elif dy < 0:
+            y_direction = Direction.SOUTH.value
+        else:
+            y_direction = ""
+
+        if x_direction and y_direction:
+            return f"{y_direction} {x_direction}"
+        elif x_direction:
+            return x_direction
+        elif y_direction:
+            return y_direction
+        else:
+            return "same location"
     
     def search(self):
         output = Text(f'You search {self.name} but find nothing of interest.', style="dim")
