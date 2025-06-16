@@ -4,13 +4,10 @@ from ai_game_master.locations import AI_Locations
 from game.enums.location_type import LocationType
 from game.factories.location_abstract_factory import LocationAbstractFactory
 from game.generators.configurations.location_type_config import LOCATION_TYPE_CONFIG
-from faker import Faker
 from typing import List
 import random
 
 from game.models.locations.base_location import BaseLocation
-
-fake = Faker()
 
 TEMPLATES = {}
 
@@ -30,8 +27,12 @@ class RandomLocation:
     def build(self, neighboringLocations: List[BaseLocation], id: int = 0):
         neighboringTypes = [location.type for location in neighboringLocations]
         type = self.__get_type__(neighboringTypes)
-        # name = self.__generate_name__(type)
-        # description = self.__generate_description__(type)
+
+        matching_location = next((location for location in neighboringLocations if location.type == type), None)
+        if matching_location:
+            matching_location.coordinates = (self.x, self.y)
+            matching_location.id = id if id != 0 else random.randint(1, 1000)
+            return matching_location
 
         ai_location = AI_Locations(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -39,8 +40,6 @@ class RandomLocation:
             location_type=type,
             neighbor_locations=neighboringLocations
         )
-
-        print(generated_location)
 
         location = {
             'id': id if id != 0 else random.randint(1, 1000),
@@ -53,27 +52,6 @@ class RandomLocation:
         location_factory = LocationAbstractFactory()
         location = location_factory.create_location(type, **location)
         return location
-    
-    # def build(self, neighboringTypes: List[LocationType], id: int = 0):
-    #     type = self.__get_type__(neighboringTypes)
-    #     # name = self.__generate_name__(type)
-    #     # description = self.__generate_description__(type)
-
-    #     ai_location = AI_Locations(api_key=os.getenv("OPENAI_API_KEY"))
-    #     location = ai_location.describe_location(
-    #         location_type=type,
-    #         neighbor_locations=neighboringTypes
-    #     )
-
-    #     location = {
-    #         'id': id if id != 0 else random.randint(1, 1000),
-    #         'coordinates': {"x": self.x, "y": self.y},
-    #         'type': type.value,
-    #     }
-
-    #     location_factory = LocationAbstractFactory()
-    #     location = location_factory.create_location(type, **location)
-    #     return location
 
     def __get_type__(self, neighboringTypes: List[LocationType]) -> LocationType:
         available_types = set()
